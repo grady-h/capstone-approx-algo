@@ -1,0 +1,165 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx, amsmath, amsthm, amssymb, enumitem, lipsum, algorithm, algpseudocode}
+
+\setlist[enumerate]{leftmargin=1.25cm, nosep}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+\newenvironment{note}[2][Note]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{fact}[2][Fact]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{definition}[2][Definition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\hspace{-1ex}\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{principle}[2][Principle]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{envsection}[1]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+
+\title{An Introduction to Complexity Theory\\ and Approximation Algorithms}
+\author{Grady Hollar}
+\date{Fall 2025}
+
+\begin{document}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
+\maketitle
+
+
+
+\begin{center}
+    \textsc{1. An Introduction to Theoretical Computation}
+\end{center}
+
+Introduction to computing. What is a Turing machine? What is an algorithm?
+
+\begin{center}
+    \textsc{2. Decision Problems and Complexity Classes}
+\end{center}
+
+What does it mean for problems to be in the classes $P$ and $NP$? What are $NP$-complete problems?
+
+
+\begin{center}
+    \textsc{3. Approximation Algorithms}
+\end{center}
+
+% What is an approximation algorithm? Approximation algorithms produce feasible solutions to certain optimization problems that are, in some sense, ``close'' to an optimal solution.
+
+% In order to talk about approximation algorithms, we first must introduce the 
+
+% What do we mean by an ``approximation algorithm''? 
+\noindent Many problems of interest in computer science are those which ask us to produce optimal solutions. Some of these problems can be solved in polynomial time. For example:
+\begin{center}
+    Given an unweighted graph $G = (V,E)$ and two vertices $s,t \in V$,\\
+    what is the shortest path between $s$ and $t$?
+\end{center}
+Readers who have taken a class on data structures and algorithms will know that a simple breadth-first-search on $G$ will give the optimal solution in $O(|V| + |E|)$ time. Others, however, are not so easy:
+\begin{center}
+    Given a geographical map $M$, what is the minimum number of colors needed\\ to color $M$ so that no two neighboring regions share the same color? 
+\end{center}
+For problems like the one above, we currently have no hope in developing algorithms that would be able to produce optimal solutions efficiently. But what if we could get ``close'' to an optimal solution in polynomial time? This is the question that motivates the study of approximation algorithms.\\
+\\
+Before defining such algorithms, we first need to formalize our notion of optimization problems.
+
+\begin{definition}{ (Optimization Problem)}{}
+    An \textit{optimization problem} $\Pi$ is a pair $(D_\Pi, f_\Pi)$, where $D_\Pi$ is the set of \textit{valid instances} for $\Pi$ and $f_\Pi$ is an \textit{objective function}. Each instance $I \in D_\Pi$ has a nonempty set of \textit{feasible solutions} $S_\Pi(I)$. The \textit{size} of an instance, denoted by $|I|$, is the number of bits required to represent $I$ in binary. Put
+    \[
+    \mathcal{F}_\Pi = \{(I,s) : I \in D_\Pi, s \in S_\Pi(I)\}.
+    \]
+    The objective function $f_\Pi: \mathcal{F}_\Pi \to \Q^+$ assigns a positive rational \textit{cost} to each feasible solution of any given instance. $\Pi$ is specified to either be a \textit{minimization} or \textit{maximization} problem. An \textit{optimal solution} for an instance $I$ of a minimization (maximization) problem is a feasible solution $\omega$ for $I$ such that
+    \[
+    f_\Pi(I,\omega) \leq f_\Pi(I,s) \qquad \Bigl( f_\Pi(I,\omega) \geq f_\Pi(I,s) \Bigr)
+    \]
+    for all $s \in S_\Pi(I)$, and we denote the value of $f_\Pi(I,\omega)$ by $\text{OPT}_\Pi(I)$.
+\end{definition}
+
+\noindent\textbf{Note/Aside:} Implicitly, we will assume that all optimization problems we consider are \textbf{NP}-\textit{optimization problems}. This notion is To ensure the optimization problems we consider are actually feasible to set up in the first place, we impose a few restrictions.
+
+\begin{definition}{ (NP-optimization Problem)}{}
+    We say an optimization problem $\Pi$ is an \textbf{NP}-\textit{optimization problem} if each of the following hold:\vspace{3pt}
+    \begin{enumerate}
+        \item[(i)] $D_\Pi$ is recognizable in polynomial time.\vspace{3pt}
+        \item[(ii)] For a fixed $I \in D_\Pi$, every $s \in S_\Pi(I)$ is of length polynomially bounded in $|I|$, and there exists a polynomial time algorithm that, given a pair $(I,s)$, decides whether $s \in S_\Pi(I)$.\vspace{3pt}
+        \item[(iii)] $f_\Pi$ is computable in polynomial time.
+    \end{enumerate}
+\end{definition}
+
+% \begin{definition}{ (NP-optimization Problem)}{}
+%     An \textbf{NP}-\textit{optimization problem}, $\Pi$, consists of the following:\vspace{3pt}
+%     \begin{enumerate}
+%         \item[$\bullet$] A (polynomial time recognizable) set of \textit{valid instances} to the problem, $D_\Pi$. For an instance $I \in D_\Pi$, its \textit{size}, denoted by $|I|$, is the number of bits needed to represent $I$ in binary. Every instance $I \in D_\Pi$ also has a set of \textit{feasible solutions}, $S_\Pi(I)$. We require that $S_\Pi(I) \neq \emptyset$ and that every solution $s \in S_\Pi(I)$ has a binary representation whose length is polynomially bounded in $|I|$. Further, there is a polynomial time algorithm that, given a pair $(I,s)$, decides whether $s \in S_\Pi(I)$.\vspace{3pt}
+%         \item[$\bullet$] A (polynomial time computable) \textit{objective function} $f_\Pi$ that assigns a nonnegative rational number to each pair $(I,s)$, where $I \in D_\Pi$ and $s$ is a feasible solution for $I$.
+%     \end{enumerate}
+% \end{definition}
+
+
+
+\begin{definition}{ (Approximation Algorithm)}{}
+    Let $\Pi$ be a minimization (maximization) problem, and let $\rho : \N \to \Q^+$ be a function with $\rho \geq 1$ ($\rho \leq 1$). An algorithm $\mathcal{A}$ is said to be a \textit{$\rho$-factor approximation algorithm for $\Pi$} if, for every instance $I$, $\mathcal{A}$ produces a feasible solution $s$ for $I$ such that
+    \[
+    f_\Pi(I,s) \leq \rho(|I|) \cdot \text{OPT}_\Pi(I) \qquad \Bigl( f_\Pi(I,s) \geq \rho(|I|) \cdot \text{OPT}_\Pi(I) \Bigr),
+    \]
+    and $\mathcal{A}$'s running time is bounded by some polynomial in $|I|$.
+\end{definition}
+
+\begin{center}
+    \textsc{3. The Traveling Salesperson Problem}
+\end{center}
+
+\begin{envsection}{Note.}
+    Throughout this section, we assume all graphs to be undirected and weighted.
+\end{envsection}
+
+\begin{definition}{}{}
+    
+\end{definition}
+
+\begin{envsection}{Optimization Problem (TSP).}
+    Given a complete, weighted, undirected graph $G = (V,E)$, what is the minimum cost Hamiltonian cycle in $G$?
+\end{envsection}
+
+\begin{definition}{ (Tree)}{}
+    A \textit{tree} is a graph that contains no cycles.
+\end{definition}
+
+\begin{definition}{ (Spanning Tree)}{}
+    Given a graph $G = (V,E)$, a \textit{spanning tree} of $G$
+\end{definition}
+
+\begin{algorithm}
+    \renewcommand{\thealgorithm}{}
+    \caption{\textsc{Approx-TSP}$(G,c)$}
+    \begin{algorithmic}
+        \State Select an arbitrary $v \in G.V$ to be a ``root''
+        \State Compute a minimum spanning tree $T$ for $G$ from root $v$ using \textsc{MST-Prim}$(G,c,v)$
+    \end{algorithmic}
+\end{algorithm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% XX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%% END XX %%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
