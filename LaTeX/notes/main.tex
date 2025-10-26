@@ -80,38 +80,39 @@ Vertex cover, set cover.
 
 \subsection{A simple MAX-3SAT algorithm}
 
-(we assume each clause contains exactly 3 distinct variables + no clause contains both a variable and its negation (you can relax this second one tho?))
-
-\begin{definition}{(Randomized Approximation Algorithm)}{}
-    We say that a randomized algorithm for a problem has an \textit{approximation ratio} of $\rho(n)$ if, for any input of size $n$, the expected cost of the solution produced by the randomized algorithm is within a factor of $\rho(n)$ of the cost of an optimal solution.
-\end{definition}
-
-% \begin{definition}{(Randomized Approximation Algorithm)}{}
-%     An algorithm $\mathcal{A}$ is said to be a \textit{$\rho$-factor approximation algorithm} for an optimization problem $\Pi$ if, for every instance $I$, $\mathcal{A}$ produces a feasible solution $s$ for $I$ such that
-%     \[
-%     f_\Pi(I,s) \leq \rho(|I|) \cdot \text{OPT}_\Pi(I) \qquad \Bigl( f_\Pi(I,s) \geq \rho(|I|) \cdot \text{OPT}_\Pi(I) \Bigr),
-%     \]
-%     and $\mathcal{A}$'s running time is bounded by some polynomial in $|I|$.
-% \end{definition}
+Let's recall the most fundamental NP-complete problem: the \textit{satisfiability} (or \textit{SAT}) \textit{problem}. Recall that a Boolean formula in $k$-conjunctive normal form ($k$-CNF) consists of clauses connected by logical and's, where each clause consists of exactly $k$ distinct literals connected by logical or's. For example,
+\[
+\phi = (x_1 \lor \neg x_2 \lor \neg x_3) \land (x_2 \lor \neg x_4 \lor x_5) \land (\neg x_3 \lor x_4 \lor x_6) \land (x_1 \lor x_3 \lor x_5)
+\]
+is a 3-CNF formula with 4 clauses and 6 variables. Given a CNF formula, the SAT problem asks whether we can find an assignment for its variables such that the formula evaluates to true.\\
+\\
+In the optimization version of this decision problem, we'll instead focus on trying to satisfy as many clauses in the formula as possible. We'll also concern ourselves only with 3-CNF formulas, since the general SAT problem can be reduced to 3-SAT (source?).
 
 \begin{envsection}{Optimization Problem (MAX-$3$SAT)}
     Given a 3-CNF formula $\phi$, find an assignment of $\phi$ that satisfies the largest number of clauses.
 \end{envsection}
 
+\noindent How good of a solution could we get to the above problem by setting each variable in the given formula completely randomly? We'll soon see that, on average, this simple approach will surprisingly get us close to an optimal solution---quite close, in fact! But what do we mean by ``on average''? We need to formalize what it means to have an approximation factor when our algorithm involves an element of randomization.
+
+\begin{definition}{(Randomized Approximation Algorithm)}{}
+    We say that a randomized algorithm for an optimization problem has an approximation ratio of $\rho(n)$ if, for any input of size $n$, the \textit{expected cost} of the solution produced by the randomized algorithm is within a factor of $\rho(n)$ of the cost of an optimal solution.
+\end{definition}
+
+\noindent To see how we calculate this expected cost in practice, let's prove that our proposed algorithm to the 3-SAT problem is, interestingly, an 8/7-approximation for the MAX-3SAT problem.
 
 \begin{algorithm}
-    % \renewcommand{\thealgorithm}{}
+    \renewcommand{\thealgorithm}{}
     \caption{\textsc{Approx-MAX-3SAT}$(\phi)$}
     \begin{algorithmic}
         \For{$x_i \in \phi$}
-            \State Assign $x_i$ randomly to be 0 or 1
+            \State Assign $x_i$ randomly to be 0 or 1 with equal probabilities 1/2
         \EndFor
         \State \Return the assignment
     \end{algorithmic}
 \end{algorithm}
 
 \begin{theorem}{2.1}{}
-    Algorithm 1 is an $8/7$-approximation for MAX-3SAT.
+    \textsc{Approx-MAX-3SAT} is an $8/7$-approximation for MAX-3SAT.
 
     \begin{proof}
         Let $\phi$ be a 3-CNF formula with $n$ variables $x_1,x_2,\dots,x_n$ and $m$ clauses. For $1 \leq i \leq m$, define the random variable
@@ -126,19 +127,15 @@ Vertex cover, set cover.
         \[
         Y = \sum_{i=1}^m Y_i.
         \]
-        So, it suffices to compute $E[Y]$. Since each variable is set to 1 with probability $1/2$ and 0 with probability $1/2$, and a clause is not satisfied only if all three of its literals are set to 0, we have
+        So, the expected cost of the algorithm will be exactly $E[Y]$. Since each literal is set to 1 with probability $1/2$ and 0 with probability $1/2$, and a clause is not satisfied only if all three of its literals are set to 0, we have
         \[
-        P[Y_i = 0] = (1/2)^3 = 1/8,
-        \]
-        so that
-        \[
-        P[Y_i = 1] = 1 - 1/8 = 7/8.
+        P[Y_i = 0] = (1/2)^3 = 1/8 \quad \Longrightarrow \quad P[Y_i = 1] = 1 - 1/8 = 7/8.
         \]
         Computing $E[Y_i]$ then gives us
         \[
         E[Y_i] = 1 \cdot 7/8 + 0 \cdot 1/8 = 7/8.
         \]
-        We may now compute
+        Now we can use the familiar properties of expected values along with the above calculations to see that
         \begin{align*}
             E[Y] &= E \left[ \sum_{i=1}^m Y_i \right]\\
             &= \sum_{i=1}^{m} E[Y_i]\\
@@ -148,6 +145,29 @@ Vertex cover, set cover.
         Since the maximum amount of clauses that can be satisfied in $\phi$ is $m$, the approximation ratio is at most $m/(7m/8) = 8/7$.
     \end{proof}
 \end{theorem}
+
+\noindent The keen reader may have realized that in our proof we have not addressed an important possibility: what if a clause contains both a variable and its negation? Surely this will change the probabilities we calculated, and in turn the approximation factor. Let's show that, in fact, there is no need for such worries. 
+
+% We began with two assumptions on the formula our algorithm considers. What happens if we relax these assumptions? First, let's allow our formula's clauses to contain both a variable and its negation, while still assuming each clause cannot contain repeated variables. For example, we'll allow clauses such as $(x_1 \lor \neg x_1 \lor x_2)$, but clauses such as $(x_1 \lor x_1 \lor x_2)$ are still not allowed.
+
+\begin{proposition}{ 2.2}{}
+    Without assuming no clause contains a variable and its negation, Algorithm 1 is \textit{still} an 8/7-approximation for MAX-3SAT.
+\end{proposition}
+
+\begin{proof}
+    Suppose that $k$ of $\phi$'s clauses contain both a variable and its negation, and $m$ clauses do not. For each of these remaining $m$ clauses, we'll define the same random variable $Y_i$ as we did before. Now, notice that for each of the $k$ clauses containing a variable and its negation, the clause will be satisfied \textit{no matter what assignment} for $\phi$ is chosen. So, the total number of satisfied clauses in $\phi$ is exactly
+    \[
+    Y = Y_1 + Y_2 + \cdots + Y_m + k.
+    \]
+    The calculation of each $E[Y_i]$ is the same as before, and so
+    \[
+    E[Y] = E \left[ \sum_{i=1}^{m} Y_i + k \right] = E \left[ \sum_{i=1}^{m} Y_i \right] + k = 7m/8 + k.
+    \]
+    Since $m + k$ is the maximum number of clauses that can be satisfied, the approximation ratio is at most
+    \[
+    \frac{m+k}{7m/8 + k} \leq \frac{m+k}{7m/8 + 7k/8} = \frac{8}{7}.
+    \]
+\end{proof}
 
 \subsection{The weighted vertex cover problem}
 
@@ -171,8 +191,8 @@ subject to
     \caption{\textsc{Approx-Min-Weight-VC}$(G, w)$}
     \begin{algorithmic}
         \State $C = \emptyset$
-        \State compute an optimal solution $\overline{x}$ to the above linear program.
-        \For{$v \in V$}
+        \State Compute an optimal solution $\overline{x}$ to $G$'s associate linear program.
+        \For{$v \in G.V$}
             \If{$\overline{x}_v \geq 1/2$}
                 \State $C = C \cup \{v\}$
             \EndIf
