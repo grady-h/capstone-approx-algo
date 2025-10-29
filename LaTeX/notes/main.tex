@@ -52,29 +52,30 @@
 
 
 
-\begin{center}
-    \textsc{X. Basic Definitions}
-\end{center}
-
 \section{Basic Definitions}
 
 What is an approximation algorithm?
 
-\subsection{Min-max relations}
+\section{Basic Examples}
 
 
-\begin{center}
-    \textsc{X. Some basic examples}
-\end{center}
-
-Vertex cover, set cover.
+Vertex cover, set cover?
 
 
 
+\section{The Traveling Salesperson Problem}
 
-% \begin{center}
-%     \textsc{X. Randomization and LP Methods}
-% \end{center}
+\subsection{Metric TSP}
+
+\begin{envsection}{Optimization Problem (Metric-TSP)}
+    Given a complete undirected graph $G = (V,E)$ and cost function $c: E \to \Q^+$ such that the triangle inequality holds for all $u,v,w \in V$:
+    \[
+    c(u,v) \leq c(u,w) + c(w,v),
+    \]
+    find a minimum cost cycle in $G$ visiting every vertex exactly once.
+\end{envsection}
+
+\subsection{Inapproximability of General TSP}
 
 \section{Randomization and LP Methods}
 
@@ -86,7 +87,9 @@ Let's recall the most fundamental NP-complete problem: the \textit{satisfiabilit
 \]
 is a 3-CNF formula with 4 clauses and 6 variables. Given a CNF formula, the SAT problem asks whether we can find an assignment for its variables such that the formula evaluates to true.\\
 \\
-In the optimization version of this decision problem, we'll instead focus on trying to satisfy as many clauses in the formula as possible. We'll also concern ourselves only with 3-CNF formulas, since the general SAT problem can be reduced to 3-SAT (source?).
+In the optimization version of this decision problem, we'll instead focus on trying to satisfy as many clauses in the formula as possible. We'll also concern ourselves only with 3-CNF formulas, since the general SAT problem can be reduced to 3-SAT (source?).\\
+\\
+\textbf{Aside:} In classical literature, the definition of a $k$-CNF formula only requires each clause to contain \textit{at most} $k$ literals, not exactly $k$. Adding in this extra condition as we have is formally known as MAX-E$k$SAT, with the E standing for ``exactly''. It turns out that the usual formal version of the MAX-3SAT problem also has a . The interested reader may wish to look up the ``Karloff-Zwick algorithm''.
 
 \begin{envsection}{Optimization Problem (MAX-$3$SAT)}
     Given a 3-CNF formula $\phi$, find an assignment of $\phi$ that satisfies the largest number of clauses.
@@ -169,25 +172,27 @@ In the optimization version of this decision problem, we'll instead focus on try
     \]
 \end{proof}
 
-\subsection{The weighted vertex cover problem}
+\subsection{Weighted vertex cover and LP rounding}
 
-\begin{envsection}{Optimization Problem (Minimum Weight Vertex Cover)}
-    Given an undirected graph $G = (V,E)$ and a weight function $w: V \to \Q^+$, find a vertex cover $C \subseteq V$ of minimum weight $w(C) = \sum_{v \in C} w(v)$.
+\begin{envsection}{Optimization Problem (Min-Weight Vertex Cover)}
+    Given an undirected graph $G = (V,E)$ and a weight function on vertices $w: V \to \Q^+$, find a vertex cover $C \subseteq V$ of minimum weight $w(C) = \sum_{v \in C} w(v)$.
 \end{envsection}
 
-Consider the following linear program:\\
-\\
-minimize 
-$$\displaystyle \sum_{v \in V}w(v) \cdot x_v$$
-subject to
-\begin{align*}
-    x_u + x_v &\geq 1 \quad \forall (u,v) \in E\\
-    x_v &\leq 1 \quad \forall v \in V\\
-    x_v &\geq 0 \quad \forall v \in V
-\end{align*}
+\noindent Consider the following linear program:
+
+\begin{flalign*}
+    &\qquad\qquad\text{minimize } \qquad \sum_{v \in V} w(v) \cdot x_v &\\
+\end{flalign*}
+\vspace{-30pt}
+\begin{flalign*}
+    \qquad\qquad\text{subject to} \qquad x_u + x_v &\geq 1 \quad \forall (u,v) \in E &\\
+    x_v &\leq 1 \quad \forall v \in V &\\
+    x_v &\geq 0 \quad \forall v \in V &
+\end{flalign*}
+
 
 \begin{algorithm}
-    % \renewcommand{\thealgorithm}{}
+    \renewcommand{\thealgorithm}{}
     \caption{\textsc{Approx-Min-Weight-VC}$(G, w)$}
     \begin{algorithmic}
         \State $C = \emptyset$
@@ -202,7 +207,7 @@ subject to
 \end{algorithm}
 
 \begin{theorem}{2.2}
-    Algorithm 2 is a 2-approximation algorithm for the minimum weight vertex cover problem.
+    \textsc{Approx-Min-Weight-VC} is a 2-approximation algorithm for the minimum weight vertex cover problem.
 
     \begin{proof}
         Want to show:\vspace{3pt}
@@ -217,6 +222,9 @@ subject to
         \end{enumerate}
     \end{proof}
 \end{theorem}
+
+
+\section{A Fully Polynomial Time Approximation Scheme}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% XX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%

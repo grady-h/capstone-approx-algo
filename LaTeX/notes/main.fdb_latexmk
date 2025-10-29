@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1761509413 "/Users/gradyhollar/Documents/School/fall_2025/capstone-approx-algo/LaTeX/notes/main.tex" "main.pdf" "main" 1761509414 0
-  "/Users/gradyhollar/Documents/School/fall_2025/capstone-approx-algo/LaTeX/notes/main.tex" 1761509413 9963 652bd6b7aa4b3c9eba9c89e36e9d7c8a ""
+["pdflatex"] 1761711754 "/Users/gradyhollar/Documents/School/fall_2025/capstone-approx-algo/LaTeX/notes/main.tex" "main.pdf" "main" 1761711755 0
+  "/Users/gradyhollar/Documents/School/fall_2025/capstone-approx-algo/LaTeX/notes/main.tex" 1761711754 10832 e35b598bb33af6c946dfa7969fd79ed0 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -79,8 +79,8 @@
   "/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1704165247 4623355 b8cad38412faebe1ce5b780a45db67bd ""
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1704165193 7883456 3660633e51eb40408282559136a109cc ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
-  "main.aux" 1761509414 894 ea6d407aa35e5303be11556f6c3f30b7 "pdflatex"
-  "main.tex" 1761509413 9963 652bd6b7aa4b3c9eba9c89e36e9d7c8a ""
+  "main.aux" 1761711755 1370 22aaed6d69467c03ce9817eb4fec06de "pdflatex"
+  "main.tex" 1761711754 10832 e35b598bb33af6c946dfa7969fd79ed0 ""
   (generated)
   "main.aux"
   "main.log"
