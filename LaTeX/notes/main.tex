@@ -70,15 +70,106 @@ Vertex cover, set cover?
 
 \subsection{Metric TSP}
 
+The Traveling Salesperson Problem (TSP) is perhaps one of the best known NP-hard optimization problems in all of computer science. Informally, it asks, given a list of cities and distances between each pair of cities, what is the shortest route that visits every city exactly once and starts and ends at the same city? In the version of the problem we consider, we will further require that the \textit{triangle inequality} holds for all distances between cities. This is an important distinction that we will touch on more later. Formally, this problem is known as \textit{Metric}-TSP, and is proposed as follows:
+
 \begin{envsection}{Optimization Problem (Metric-TSP)}
     Given a complete undirected graph $G = (V,E)$ and cost function $c: E \to \Q^+$ such that the triangle inequality holds for all $u,v,w \in V$:
     \[
     c(u,v) \leq c(u,w) + c(w,v),
     \]
-    find a minimum cost cycle in $G$ visiting every vertex exactly once.
+    find a minimum cost cycle in $G$ that visits every vertex exactly once.
 \end{envsection}
 
+\noindent In this section, we'll devise a 2-factor approximation algorithm for Metric-TSP. Our approach revolves around finding a minimum spanning tree of $G$ and constructing a cycle using the MST. The algorithm works as follows:
+
+\begin{algorithm}
+    \renewcommand{\thealgorithm}{}
+    \caption{\textsc{Approx-TSP}$(G,c)$}
+    \begin{algorithmic}
+        % \State Select an arbitrary $v \in G.V$ to be a ``root''
+        \State Compute a minimum spanning tree $T$ of $G$.
+        \State Perform a preorder traversal $\mathcal{P}$ of $T$.
+        \State Construct a Hamiltonian cycle $H$ by listing the vertices of $G$ in the order of their first appearance in $\mathcal{P}$.
+        \State \Return $H$
+    \end{algorithmic}
+\end{algorithm}
+
+\noindent Below is a depiction of the algorithm in action. Figure (a) is the original complete graph $G$, with Figure (b) showing a minimum spanning tree $T$ of $G$. Figure (c) outlines the preorder traversal $\mathcal{P}$ of $T$. Lastly, Figure (d) is the resulting Hamiltonian cycle $H$ constructed from the $T$, where the backtracking steps in $\mathcal{P}$ have been ``short-cut'' for more direct paths.  
+
+\begin{figure}[ht]
+    \begin{minipage}{0.25\textwidth}
+     \centering
+     \includegraphics[width=1.75in]{images/Cormen_TSP_a.png}
+   \end{minipage}\hfill
+   \begin{minipage}{0.25\textwidth}
+     \centering
+     \includegraphics[width=1.75in]{images/Cormen_TSP_b.png}
+   \end{minipage}\hfill
+   \begin{minipage}{0.25\textwidth}
+     \centering
+     \includegraphics[width=1.75in]{images/Cormen_TSP_c.png}
+   \end{minipage}\hfill
+   \begin{minipage}{0.25\textwidth}
+     \centering
+     \includegraphics[width=1.75in]{images/Cormen_TSP_d.png}
+   \end{minipage}
+\end{figure}
+
+\newpage
+\noindent To place an approximation ratio on the cost of the resulting cycle $H$, we begin by first establishing a bound on the cost of the traversal $\mathcal{P}$. Then, since the triangle inequality holds in $G$, this ``short-cutting'' step we use to construct $H$ does not increase the cost of the traversal, and the same bound will hold for $H$. Let's flesh out this approach and prove our claimed approximation ratio.
+
+\begin{theorem}{3.1}{}
+    \textsc{Approx-TSP} is a 2-factor approximation for the Metric-TSP problem.
+
+    \begin{proof}
+        There are numerous well-established and efficient algorithms to compute minimum spanning trees, so the algorithm clearly runs in polynomial time. Now, lets first consider the optimal tour $O$. Since $O$ visits each vertex of $G$ exactly once, deleting any edge from $O$ will produce a spanning tree of $G$. Since $T$ is a \textit{minimum} spanning tree, it follows that $c(T) \leq c(O)$.\\
+        \\
+        Next, note that since the traversal $\mathcal{P}$ contains each edge of $T$ exactly twice, the cost of $\mathcal{P}$ is precisely double that of the cost of $T$, or rather, $c(\mathcal{P}) = 2 \cdot c(T)$. Finally, as noted above, the triangle inequality guarantees that $c(H) \leq c(\mathcal{P})$. Combining these inequalities, we have 
+        \[
+        c(H) \leq c(\mathcal{P}) = 2 \cdot c(T) \leq 2 \cdot c(O),
+        \]
+        which establishes the desired approximation ratio.
+    \end{proof}
+\end{theorem}
+
+\subsubsection{(Optional) Improving the ratio to 3/2}
+
+\noindent Another way to describe the above algorithm is through \textit{Eulerian tours}. Recall that an Eulerian tour of a graph is a cycle that visits every edge exactly once, allowing for revisited vertices. An equivalent formulation of \textsc{Approx-TSP} finds an MST, doubles each edge in the tree, performs an Eulerian tour on the doubled tree, then short-cuts the tour to find a Hamiltonian cycle. Is there a cheaper subgraph to perform an Eulerian tour on than the one obtained by doubling every edge in the MST?\\
+\\
+A key result in graph theory is that a connected graph has an Eulerian tour if and only if every vertex has even degree. So, we only need to concern ourselves with somehow ``remedying'' the odd degree vertices in the MST to obtain a subgraph with an Eulerian tour. Using this idea, it's possible to produce an algorithm with a 3/2 approximation factor for Metric-TSP. Readers interested in the details are encouraged to read Section 3.2 in Vazirani's \textit{Approximation Algorithms}.\\
+\\
+Whether the 3/2 factor can be improved further is currently one of the biggest open problems within the field of approximation algorithms.
+
 \subsection{Inapproximability of General TSP}
+
+We devised our approximation for TSP under the assumption that the triangle inequality holds on its edge weights. While this holds true practically for many graphs, e.g. a network modeling roads and intersections where edge weights are lengths of roads, in complete generality, this is quite a big assumption. Can we still approximate TSP without this assumption?\\
+\\
+As it turns out, the answer is almost certainly not. More formally, we'll prove that general TSP cannot be approximated at all, assuming $P \neq NP$. Results such as these are known as \textit{inapproximability} or \textit{hardness of approximation} results. These results show that, for some $NP$-hard optimization problems, approximating them past a certain factor would prove that $P = NP$. This is quite interesting, since as we will see later, other $NP$-hard optimization problems can be approximated arbitrarily well. In some sense, some problems are much harder to approximate than others.\\
+\\
+The general strategy for proving hardness of approximation results is to assume the existence of an approximation algorithm of a certain degree and to use the algorithm to create a decider for some known $NP$-hard problem. In the case of TSP, we will show that an approximation algorithm of \textit{any} factor can be used to decide the Hamiltonian cycle problem in polynomial time. Here, we let $n = |V|$, where $V$ is the vertex set of input graph for TSP.
+
+\begin{theorem}{3.2}{}
+    For any function $\rho(n) \geq 1$, TSP cannot be approximated within a factor of $\rho(n)$, unless $P = NP$.
+
+    \begin{proof}
+        Assume for contradiction there is a factor $\rho(n)$ polynomial time approximation algorithm, $A$, for the general TSP problem. The key idea is a reduction from the Hamiltonian cycle problem to the TSP problem that takes a graph $G = (V,E)$ on $n$ vertices and transform it into a complete graph $G'$ on $n$ vertices such that
+        \begin{enumerate}
+            \item[(1)] If $G$ has a Hamiltonian cycle, the cost of an optimal TSP tour in $G'$ is $n$, and \vspace{3pt}
+            \item[(2)] If $G$ doesn't have a Hamiltonian cycle, the cost of an optimal TSP tour in $G'$ is strictly greater than $\rho(n) \cdot n$. \vspace{3pt}
+        \end{enumerate}
+        What happens when we run $A$ on our new graph $G'$? Since $A$ must produce a solution within $\rho(n)$ of the optimal, it must return a tour of cost $\leq \rho(n) \cdot n$ in the first case and $> \rho(n) \cdot n$ in the second. To decide whether the original graph $G$ had a Hamiltonian cycle, we simply need to compute the cost of the given TSP tour and compare it with $\rho(n) \cdot n$. So, if we can find such a reduction, $A$ can be used to solve the Hamiltonian cycle problem in polynomial time.\\
+        \\
+        The reduction is quite simple. Let $G'$ be the complete graph on the same vertex set $V$, with edge weights defined as follows:
+        \[
+        c(u,v) =
+        \begin{cases}
+            1, &(u,v) \in E\\
+            \rho(n) \cdot n, &(u,v) \notin E.
+        \end{cases}
+        \]
+        If $G$ contains a Hamiltonian cycle, then the optimal tour on $G'$ is simply this cycle, which has cost $n$. If $G$ does not contain a Hamiltonian cycle, the optimal tour on $G'$ must use some edge \textit{not} in $G$, which has cost $\rho(n) \cdot n$, making the total tour cost strictly greater than $\rho(n) \cdot n$.
+    \end{proof}
+\end{theorem}
 
 \section{Randomization and LP Methods}
 
@@ -107,7 +198,7 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
     \caption{\textsc{Approx-MAX-3SAT}$(\phi)$}
     \begin{algorithmic}
         \For{$x_i \in \phi$}
-            \State Assign $x_i$ randomly to be 0 or 1 with equal probability 1/2
+            \State Assign $x_i$ randomly to be 0 or 1 with equal probability 1/2.
         \EndFor
         \State \Return the assignment
     \end{algorithmic}
@@ -283,7 +374,7 @@ which gives rise to the following bottom-up DP algorithm.
     \renewcommand{\thealgorithm}{}
     \caption{\textsc{Knapsack-DP}$(A, w, p, W, P)$}
     \begin{algorithmic}
-        \State Initialize $DP(1,\ell)$ for $\ell \in \{0,1,\dots,nP\}$
+        \State Initialize $DP(1,\ell)$ for $\ell \in \{0,1,\dots,nP\}$.
         \vspace{2ex}
         \For{$i=2$ \textbf{to} $n$}
             \For{$\ell=0$ \textbf{to} $nP$}
@@ -293,7 +384,7 @@ which gives rise to the following bottom-up DP algorithm.
                 \EndIf
                 \State $leaveOut = DP(i-1,\ell)$
                 \State $DP(i,\ell) = \min\{add,\; leaveOut\}$
-                \State Store the corresponding $S_{i,\ell}$
+                \State Store the corresponding $S_{i,\ell}$.
 
             \EndFor
         \EndFor
@@ -312,7 +403,7 @@ If it just so happened that $P = q(n)$ for some polynomial $q$, then our algorit
     \caption{\textsc{Knapsack-FPTAS}$(A, w, p, W, P, \varepsilon)$}
     \begin{algorithmic}
         \State $K = \varepsilon \frac{P}{n}$
-        \State Define a new profit function $p'$ by $p'(a_i) = \big\lfloor \frac{p(a_i)}{K} \big\rfloor$ for each $a_i$
+        \State Define a new profit function $p'$ by $p'(a_i) = \big\lfloor \frac{p(a_i)}{K} \big\rfloor$ for each $a_i$.
         \State $S = $ \textsc{Knapsack-DP}$(A,w,p',W,P)$
         \State \Return $S$
     \end{algorithmic}

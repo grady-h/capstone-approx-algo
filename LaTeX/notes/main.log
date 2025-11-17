@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.1.1)  16 NOV 2025 21:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.1.1)  17 NOV 2025 11:15
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -390,57 +390,132 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 LaTeX Font Info:    Trying to load font information for U+msb on input line 55.
  (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1
+)
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 87.
+<images/Cormen_TSP_a.png, id=52, 401.5pt x 401.5pt>
+File: images/Cormen_TSP_a.png Graphic file (type png)
+<use images/Cormen_TSP_a.png>
+Package pdftex.def Info: images/Cormen_TSP_a.png  used on input line 102.
+(pdftex.def)             Requested size: 126.47249pt x 126.47316pt.
+
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 102--103
+ [][] 
+ []
+
+<images/Cormen_TSP_b.png, id=54, 401.5pt x 401.5pt>
+File: images/Cormen_TSP_b.png Graphic file (type png)
+<use images/Cormen_TSP_b.png>
+Package pdftex.def Info: images/Cormen_TSP_b.png  used on input line 106.
+(pdftex.def)             Requested size: 126.47249pt x 126.47316pt.
+
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 106--107
+ [][] 
+ []
+
+<images/Cormen_TSP_c.png, id=55, 401.5pt x 401.5pt>
+File: images/Cormen_TSP_c.png Graphic file (type png)
+<use images/Cormen_TSP_c.png>
+Package pdftex.def Info: images/Cormen_TSP_c.png  used on input line 110.
+(pdftex.def)             Requested size: 126.47249pt x 126.47316pt.
+
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 110--111
+ [][] 
+ []
+
+<images/Cormen_TSP_d.png, id=56, 401.5pt x 401.5pt>
+File: images/Cormen_TSP_d.png Graphic file (type png)
+<use images/Cormen_TSP_d.png>
+Package pdftex.def Info: images/Cormen_TSP_d.png  used on input line 114.
+(pdftex.def)             Requested size: 126.47249pt x 126.47316pt.
+
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 114--115
+ [][] 
+ []
+
+[1
 
 {/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 107.
- [2]
-pdfTeX warning (ext4): destination with the same identifier (name{algorithm.}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.208 \end{algorithm}
-                      [3]
-Underfull \hbox (badness 10000) in paragraph at lines 238--241
+Underfull \hbox (badness 10000) in paragraph at lines 125--128
 
  []
 
 
-pdfTeX warning (ext4): destination with the same identifier (name{algorithm.}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.304 \end{algorithm}
-                     
-Underfull \hbox (badness 10000) in paragraph at lines 306--309
+Underfull \hbox (badness 10000) in paragraph at lines 137--142
 
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 137--142
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 145--150
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 145--150
+
+ []
+
+[2 <./images/Cormen_TSP_a.png> <./images/Cormen_TSP_b.png> <./images/Cormen_TSP_c.png> <./images/Cormen_TSP_d.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 160--163
+
+ []
+
+[3]
 pdfTeX warning (ext4): destination with the same identifier (name{algorithm.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.319 \end{algorithm}
+l.205 \end{algorithm}
                       [4]
-Underfull \hbox (badness 10000) in paragraph at lines 376--380
+pdfTeX warning (ext4): destination with the same identifier (name{algorithm.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.299 \end{algorithm}
+                      [5]
+Underfull \hbox (badness 10000) in paragraph at lines 329--332
 
  []
 
-[5] (./main.aux)
+
+pdfTeX warning (ext4): destination with the same identifier (name{algorithm.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.395 \end{algorithm}
+                     
+Underfull \hbox (badness 10000) in paragraph at lines 397--400
+
+ []
+
+[6]
+pdfTeX warning (ext4): destination with the same identifier (name{algorithm.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.410 \end{algorithm}
+                     
+Underfull \hbox (badness 10000) in paragraph at lines 467--471
+
+ []
+
+[7] [8] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: E47164F975B2D660A1809F29CF3ECD04;1980.
+(rerunfilecheck)             Checksum: EC1DF710244688A5E6583FC4ED40CAAE;2254.
  ) 
 Here is how much of TeX's memory you used:
- 11448 strings out of 476025
- 183056 string characters out of 5790018
+ 11483 strings out of 476025
+ 183865 string characters out of 5790018
  1867388 words of memory out of 5000000
- 31723 multiletter control sequences out of 15000+600000
+ 31748 multiletter control sequences out of 15000+600000
  521149 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,13n,77p,829b,675s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,13n,77p,829b,673s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (5 pages, 264445 bytes).
+Output written on main.pdf (8 pages, 499897 bytes).
 PDF statistics:
- 185 PDF objects out of 1000 (max. 8388607)
- 136 compressed objects within 2 object streams
- 20 named destinations out of 1000 (max. 500000)
- 89 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 212 PDF objects out of 1000 (max. 8388607)
+ 152 compressed objects within 2 object streams
+ 24 named destinations out of 1000 (max. 500000)
+ 117 words of extra memory for PDF output out of 10000 (max. 10000000)
 
