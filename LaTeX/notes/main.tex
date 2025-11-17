@@ -1,7 +1,10 @@
 \documentclass{article}
 
 \usepackage[margin=1in]{geometry}
-\usepackage{graphicx, amsmath, amsthm, amssymb, enumitem, lipsum, algorithm, algpseudocode}
+\usepackage{graphicx, amsmath, amsthm, amssymb, enumitem, lipsum, algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage[hidelinks]{hyperref}
+% \usepackage[hang]{footmisc}
 
 \setlist[enumerate]{leftmargin=1.25cm, nosep}
 
@@ -81,34 +84,30 @@ Vertex cover, set cover?
 
 \subsection{A simple MAX-3SAT algorithm}
 
-Let's recall the most fundamental NP-complete problem: the \textit{satisfiability} (or \textit{SAT}) \textit{problem}. Recall that a Boolean formula in $k$-conjunctive normal form ($k$-CNF) consists of clauses connected by logical and's, where each clause consists of exactly $k$ distinct literals connected by logical or's. For example,
+Let's take a moment to remember the most fundamental NP-complete problem of them all: the \textit{satisfiability} (or SAT) \textit{problem}. Recall that a Boolean formula in $k$-conjunctive normal form ($k$-CNF) consists of clauses connected by logical and's, where each clause consists of exactly $k$ distinct literals connected by logical or's. For example,
 \[
 \phi = (x_1 \lor \neg x_2 \lor \neg x_3) \land (x_2 \lor \neg x_4 \lor x_5) \land (\neg x_3 \lor x_4 \lor x_6) \land (x_1 \lor x_3 \lor x_5)
 \]
-is a 3-CNF formula with 4 clauses and 6 variables. Given a CNF formula, the SAT problem asks whether we can find an assignment for its variables such that the formula evaluates to true.\\
-\\
-In the optimization version of this decision problem, we'll instead focus on trying to satisfy as many clauses in the formula as possible. We'll also concern ourselves only with 3-CNF formulas, since the general SAT problem can be reduced to 3-SAT (source?).\\
-\\
-\textbf{Aside:} In classical literature, the definition of a $k$-CNF formula only requires each clause to contain \textit{at most} $k$ literals, not exactly $k$. Adding in this extra condition as we have is formally known as MAX-E$k$SAT, with the E standing for ``exactly''. It turns out that the usual formal version of the MAX-3SAT problem also has a . The interested reader may wish to look up the ``Karloff-Zwick algorithm''.
+is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the SAT problem asks whether we can find an assignment for its variables such that the formula evaluates to true. In the optimization version of this decision problem, we'll instead try to satisfy as many clauses in the formula as possible.
 
 \begin{envsection}{Optimization Problem (MAX-$3$SAT)}
-    Given a 3-CNF formula $\phi$, find an assignment of $\phi$ that satisfies the largest number of clauses.
+    Given a 3-CNF formula $\phi$, find an assignment of $\phi$ that satisfies the largest number of clauses.\footnote{In classical literature, the definition of a $k$-CNF formula only requires each clause to contain \textit{at most} $k$ literals, not exactly $k$. Adding in this extra condition as we have is formally known as MAX-E$k$SAT, with the E standing for ``exactly''. It turns out, however, that the usual formal version of the MAX-3SAT problem \textit{still} admits an approximate solution with a factor identical to the one we are about to show for MAX-E3SAT, but the proof of this is far beyond the scope of this writeup. The interested reader may wish to look into the ``Karloff-Zwick algorithm''.}
 \end{envsection}
-
-\noindent How good of a solution could we get to the above problem by setting each variable in the given formula completely randomly? We'll soon see that, on average, this simple approach will surprisingly get us close to an optimal solution---quite close, in fact! But what do we mean by ``on average''? We need to formalize what it means to have an approximation factor when our algorithm involves an element of randomization.
+%  We'll also concern ourselves only with 3-CNF formulas, since the general SAT problem can be reduced to 3-SAT (source?).\\
+\noindent How good of a solution could we get to the above problem by setting each variable in the given formula completely randomly? We'll soon see that, on average, this simple approach will surprisingly get us close to an optimal solution---quite close, in fact! But what do we mean by ``on average?'' We need to formalize what it means to have an approximation factor when our algorithm involves an element of randomization.
 
 \begin{definition}{(Randomized Approximation Algorithm)}{}
     We say that a randomized algorithm for an optimization problem has an approximation ratio of $\rho(n)$ if, for any input of size $n$, the \textit{expected cost} of the solution produced by the randomized algorithm is within a factor of $\rho(n)$ of the cost of an optimal solution.
 \end{definition}
 
-\noindent To see how we calculate this expected cost in practice, let's prove that our proposed algorithm to the 3-SAT problem is, interestingly, an 8/7-approximation for the MAX-3SAT problem.
+\noindent To see how we calculate this expected cost in practice, let's prove that our proposed seemingly naive approach is, interestingly, an 8/7-approximation for the MAX-3SAT problem.
 
 \begin{algorithm}
     \renewcommand{\thealgorithm}{}
     \caption{\textsc{Approx-MAX-3SAT}$(\phi)$}
     \begin{algorithmic}
         \For{$x_i \in \phi$}
-            \State Assign $x_i$ randomly to be 0 or 1 with equal probabilities 1/2
+            \State Assign $x_i$ randomly to be 0 or 1 with equal probability 1/2
         \EndFor
         \State \Return the assignment
     \end{algorithmic}
@@ -149,7 +148,7 @@ In the optimization version of this decision problem, we'll instead focus on try
     \end{proof}
 \end{theorem}
 
-\noindent The keen reader may have realized that in our proof we have not addressed an important possibility: what if a clause contains both a variable and its negation? Surely this will change the probabilities we calculated, and in turn the approximation factor. Let's show that, in fact, there is no need for such worries. 
+\noindent The keen reader may have realized that in our proof we have not addressed an important possibility: what if a clause contains both a variable and its negation? Surely this will change the probabilities we calculated, and in turn the approximation factor, right? Let's show that, in fact, there is no need for such worries. 
 
 % We began with two assumptions on the formula our algorithm considers. What happens if we relax these assumptions? First, let's allow our formula's clauses to contain both a variable and its negation, while still assuming each clause cannot contain repeated variables. For example, we'll allow clauses such as $(x_1 \lor \neg x_1 \lor x_2)$, but clauses such as $(x_1 \lor x_1 \lor x_2)$ are still not allowed.
 
@@ -171,6 +170,8 @@ In the optimization version of this decision problem, we'll instead focus on try
     \frac{m+k}{7m/8 + k} \leq \frac{m+k}{7m/8 + 7k/8} = \frac{8}{7}.
     \]
 \end{proof}
+
+\noindent Interestingly, it has been shown that, assuming $P \neq NP$, no polynomial-time algorithm for MAX-3SAT can achieve an approximation ratio strictly better than $8/7$.\footnote{The full proof of this incredible fact is far beyond the scope of this writeup, but the interested reader can begin to learn more \href{https://en.wikipedia.org/wiki/MAX-3SAT}{\underline{here}}.} So, in the end, our somewhat naive approach gave us essentially the best solution we could hope for!
 
 \subsection{Weighted vertex cover and LP rounding}
 
@@ -226,6 +227,162 @@ In the optimization version of this decision problem, we'll instead focus on try
 
 \section{A Fully Polynomial Time Approximation Scheme}
 
+\subsection{PTAS's and FPTAS's}
+
+\subsection{Knapsack}
+
+\begin{envsection}{Optimization Problem (Knapsack)}
+    Given a collection $A = \{a_1,\dots,a_n\}$ of $n$ objects, a weight function $w: A \to \N$, a profit function $p: A \to \N$, and a ``knapsack capacity'' $W \in \N$, find a subset $S$ of $A$ whose total weight is bounded by $W$ and whose total profit $p(S)$ is maximized.
+\end{envsection}
+
+\noindent Let's start by proposing a dynamic programming solution to the problem. We'll denote by $DP(i,\ell)$ the weight of the lightest subset, denoted $S_{i,\ell}$, we can obtain from $\{a_1,\dots,a_i\}$ whose profit is exactly $\ell$. Then, the answer to the Knapsack problem is precisely the subset associated with the value $\max \{\ell : DP(n,\ell) \leq W\}$.\\
+\\
+Let $P = \max \{p(a): a \in A,\, p(a) \leq W\}$ be the value of the most profitable object in $A$ that can fit in the knapsack. Clearly, $nP$ is an upper bound for the profit of any solution we can find, so we only need to fill in values of the $DP$ table for $1 \leq i \leq n$ and $0 \leq \ell \leq nP$. At each stage, we may either add or leave out the $a_i$'th element from the knapsack. If we leave it out, $DP(i,\ell)$ remains the same as $DP(i-1,\ell)$. If we add it, we add its weight to $DP(i-1,\ell-p(a_i))$ (the previous optimal solution with respect to the \textit{remaining} profit). We can model this choice with the following recurrence:
+\[
+DP(i, \ell) = 
+\begin{cases}
+    \min \{DP(i-1,\ell),\; DP(i-1, \ell - p(a_{i})) + w(a_{i})\} &\text{if $p(a_{i}) \leq \ell$}\\
+    DP(i-1,\ell) &\text{otherwise,}
+\end{cases}
+\]
+% \noindent Let's start by proposing a dynamic programming solution to the problem. We'll denote by $DP(i,c)$ the maximum profit we can obtain from a subset $\{a_1,\dots,a_i\}$ such that the capacity of the subset is at most $c$. At each stage, we may either add or leave out the $a_{i}$'th element to the knapsack. If we leave out the new element, $DP(i,c)$ remains the same as the previous $DP(i-1,c)$. If we add it, we add its profit to $DP(i-1,c-s(a_{i}))$ (the previous optimal solution for the remaining knapsack capacity). We can model this choice with the following recurrence:
+% \[
+% DP(i, c) = 
+% \begin{cases}
+%     \max \{DP(i-1,c),\; DP(i-1, c - w(a_{i})) + p(a_{i})\} &\text{if $w(a_{i}) \leq c$}\\
+%     DP(i-1,c) &\text{otherwise,}
+% \end{cases}
+% \]
+which gives rise to the following bottom-up DP algorithm.
+
+% \begin{algorithm}
+%     \renewcommand{\thealgorithm}{}
+%     \caption{\textsc{Knapsack-DP}$(A, w, p, W)$}
+%     \begin{algorithmic}
+%         \State initialize $DP$
+%         \For{$i=0$ \textbf{to} $n$}
+%             \For{$c=0$ \textbf{to} $W$}
+%                 \If{$i=0$ \textbf{or} $c=0$}
+%                     \State $DP(i,c) = 0$
+%                 \Else
+%                     \State $add = -\infty$
+%                     \If{$w(a_{i}) \leq c$}
+%                         \State $add = DP(i-1,c - w(a_i)) + p(a_i)$
+%                     \EndIf
+%                     \State $leaveOut = DP(i-1,c)$
+%                     \State $DP(i,c) = \max\{add,\; leaveOut\}$
+%                 \EndIf
+
+%             \EndFor
+%         \EndFor
+%         \State \Return $DP(n, W)$
+%     \end{algorithmic}
+% \end{algorithm}
+
+\begin{algorithm}
+    \renewcommand{\thealgorithm}{}
+    \caption{\textsc{Knapsack-DP}$(A, w, p, W, P)$}
+    \begin{algorithmic}
+        \State Initialize $DP(1,\ell)$ for $\ell \in \{0,1,\dots,nP\}$
+        \vspace{2ex}
+        \For{$i=2$ \textbf{to} $n$}
+            \For{$\ell=0$ \textbf{to} $nP$}
+                \State $add = \infty$
+                \If{$p(a_{i}) \leq \ell$}
+                    \State $add = DP(i-1,\ell - p(a_i)) + w(a_i)$
+                \EndIf
+                \State $leaveOut = DP(i-1,\ell)$
+                \State $DP(i,\ell) = \min\{add,\; leaveOut\}$
+                \State Store the corresponding $S_{i,\ell}$
+
+            \EndFor
+        \EndFor
+        \vspace{2ex}
+        \State $M = \max \{\ell : DP(n,\ell) \leq W\}$
+        \State \Return $S_{n,M}$
+    \end{algorithmic}
+\end{algorithm}
+
+\noindent But wait... Doesn't this solve the Knapsack problem in polynomial time? Not quite. Notice that the runtime of $O(n^2P)$ depends polynomially on the maximum profit $P$.  But since this profit could be arbitrarily large with respect to $n$ (potentially $\displaystyle n! \cdot 2^{n^2}$ large, for instance!), this is not a true polynomial-bounded runtime. When an algorithm is polynomially bounded in both its input and its \textit{numerical parameters} like the one above, we call it a \textit{psuedo-polynomial time algorithm}.\\
+\\
+If it just so happened that $P = q(n)$ for some polynomial $q$, then our algorithm will in fact run in polynomial time. To obtain an FPTAS, we are going to exploit precisely this fact by ignoring a certain number of least significant bits of the profits of our objects to ensure $P$ will be small enough.
+
+\begin{algorithm}
+    \renewcommand{\thealgorithm}{}
+    \caption{\textsc{Knapsack-FPTAS}$(A, w, p, W, P, \varepsilon)$}
+    \begin{algorithmic}
+        \State $K = \varepsilon \frac{P}{n}$
+        \State Define a new profit function $p'$ by $p'(a_i) = \big\lfloor \frac{p(a_i)}{K} \big\rfloor$ for each $a_i$
+        \State $S = $ \textsc{Knapsack-DP}$(A,w,p',W,P)$
+        \State \Return $S$
+    \end{algorithmic}
+\end{algorithm}
+
+\noindent To show that this is indeed an FPTAS, we begin by placing a bound on the approximation ratio of the algorithm.
+
+\begin{lemma}{5.1}{}
+    Fix $\varepsilon > 0$. Let $S$ be the solution returned by \textsc{Knapsack-FPTAS} run with parameter $\varepsilon$, and let $O$ be the true optimal solution. Then,
+    % \[
+    % p(O) \cdot (1-\varepsilon) \leq p(S).
+    % \]
+    % \[
+    % p(S) \geq p(O) \cdot (1 - \varepsilon).
+    % \]
+    \[
+    \frac{p(O)}{p(S)} \leq \frac{1}{1 - \varepsilon}.
+    \]
+    \begin{proof}
+        First, due to rounding, we have that
+        \[
+        p(S) = \sum_{a \in S} p(a) \geq \sum_{a \in S} K \cdot \Big\lfloor \frac{p(a)}{K} \Big\rfloor.
+        \]
+        Next, note that since $S$ is an optimal solution with respect to the new profits $p'(a) = \lfloor \frac{p(a)}{K} \rfloor$, it will dominate the new profit of the original optimal solution $O$:
+        \[
+        \sum_{a \in S} K \cdot \Big\lfloor \frac{p(a)}{K} \Big\rfloor \geq \sum_{a \in O} K \cdot \Big\lfloor \frac{p(a)}{K} \Big\rfloor.
+        \]
+        Lastly, note that for any single object $a$, due to rounding again, $K \cdot \lfloor \frac{p(a)}{K} \rfloor$ will never be smaller than $p(a)$ by more than $K$. That is,
+        \[
+        \sum_{a \in O} K \cdot \Big\lfloor \frac{p(a)}{K} \Big\rfloor \geq \sum_{a \in O} \big(\,p(a) - K\,\big).
+        \]
+        Putting the three previous inequalities together gives us
+        \[
+        p(S) \geq \sum_{a \in O} \big(\,p(a) - K\,\big) \geq p(O) - nK.
+        \]
+        % \begin{align*}
+        %     p(S) = \sum_{a \in S} p(a) \geq \sum_{a \in S} K \cdot \Big\lfloor \frac{p(a)}{K} \Big\rfloor \geq \sum_{a \in O} K \cdot \Big\lfloor \frac{p(a)}{K} \Big\rfloor \geq \sum_{a \in O} \big(\,p(a) - K\,\big) \geq p(O) - nK
+        % \end{align*}
+        Finally, by noting that $P \leq p(O)$ since naively picking the single most profitable object is a feasible solution, we see that
+        \begin{align*}
+            p(S) \geq p(O) - nK = p(O) - \varepsilon P \geq p(O) \cdot (1 - \varepsilon),
+        \end{align*}
+        which is exactly the inequality we wanted to show.
+    \end{proof}
+\end{lemma}
+
+\noindent With the lemma done, we are ready for the final proof.
+
+\begin{theorem}{5.2}{}
+    \textsc{Knapsack-FPTAS} is a fully polynomial approximation scheme for the Knapsack problem.
+    
+    \begin{proof}
+        % With the adjusted profits, the running time of the call to \textsc{Knapsack-DP} is $O(n^2 \big\lfloor \frac{P}{K} \big\rfloor) = O(n^2 \big\lfloor \frac{n}{\varepsilon} \big\rfloor)$, which is polynomial in $n$ and $1/\varepsilon$. So, it remains to show that $OPT/p(S) \leq 1 + \varepsilon$
+        Given $\varepsilon > 0$, we'll run our algorithm with a new parameter $\delta = \frac{\varepsilon}{1 + \varepsilon}$. We can use the bound from Lemma 5.1 to see that
+        \begin{align*}
+            % p(O) \cdot (1 - \delta) \leq p(S)
+            \frac{p(O)}{p(S)} \leq \frac{1}{1-\delta}= \frac{1}{1 - \varepsilon/(1+\varepsilon)} = 1 + \varepsilon,
+            % \frac{p(O)}{p(S)} &\leq \frac{1}{\frac{1+\varepsilon - \varepsilon}{1 + \varepsilon}}\\
+            % \frac{p(O)}{p(S)} &\leq \frac{1}{\frac{1}{1 + \varepsilon}}\\
+            % \frac{p(O)}{p(S)} &\leq 1 + \varepsilon
+        \end{align*}
+        so that our solution is within $1 + \varepsilon$ of the optimal.\\
+        \\
+        Next, with the adjusted profits and new parameter $\delta$, the running time of the call to \textsc{Knapsack-DP} will be
+        \begin{align*}
+            O\left(n^2 \Big\lfloor \frac{P}{K} \Big\rfloor\right) = O\left(n^2 \Big\lfloor \frac{n}{\delta} \Big\rfloor\right) = O\left(n^3 \cdot \frac{1+\varepsilon}{\varepsilon}\right) = O \left( n^3 \cdot \frac{1}{\varepsilon} + n^3 \right),
+        \end{align*}
+        which is polynomial in $n$ and $1/\varepsilon$. So, our algorithm is indeed a fully polynomial time approximation scheme for the Knapsack problem!
+    \end{proof}
+\end{theorem}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% XX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%% END XX %%%%%%%%%%%%%%%%%%%%%%%%%%%
