@@ -94,7 +94,7 @@ The Traveling Salesperson Problem (TSP) is perhaps one of the best known NP-hard
     \end{algorithmic}
 \end{algorithm}
 
-\noindent Below is a depiction of the algorithm in action. Figure (a) is the original complete graph $G$, with Figure (b) showing a minimum spanning tree $T$ of $G$. Figure (c) outlines the preorder traversal $\mathcal{P}$ of $T$. Lastly, Figure (d) is the resulting Hamiltonian cycle $H$ constructed from the $T$, where the backtracking steps in $\mathcal{P}$ have been ``short-cut'' for more direct paths.  
+\noindent Below is a depiction of the algorithm in action. Figure (a) is the original complete graph $G$, with Figure (b) showing a minimum spanning tree $T$ of $G$. Figure (c) outlines the preorder traversal $\mathcal{P}$ of $T$. Lastly, Figure (d) is the resulting Hamiltonian cycle $H$ constructed from $\mathcal{P}$, where the backtracking steps have been ``short-cut'' for more direct paths.  
 
 \begin{figure}[ht]
     \begin{minipage}{0.25\textwidth}
@@ -412,7 +412,7 @@ If it just so happened that $P = q(n)$ for some polynomial $q$, then our algorit
 \noindent To show that this is indeed an FPTAS, we begin by placing a bound on the approximation ratio of the algorithm.
 
 \begin{lemma}{5.1}{}
-    Fix $\varepsilon > 0$. Let $S$ be the solution returned by \textsc{Knapsack-FPTAS} run with parameter $\varepsilon$, and let $O$ be the true optimal solution. Then,
+    Fix some $0 < \varepsilon < 1$. Let $S$ be the solution returned by \textsc{Knapsack-FPTAS} run with parameter $\varepsilon$, and let $O$ be the true optimal solution. Then,
     % \[
     % p(O) \cdot (1-\varepsilon) \leq p(S).
     % \]
@@ -457,7 +457,7 @@ If it just so happened that $P = q(n)$ for some polynomial $q$, then our algorit
     
     \begin{proof}
         % With the adjusted profits, the running time of the call to \textsc{Knapsack-DP} is $O(n^2 \big\lfloor \frac{P}{K} \big\rfloor) = O(n^2 \big\lfloor \frac{n}{\varepsilon} \big\rfloor)$, which is polynomial in $n$ and $1/\varepsilon$. So, it remains to show that $OPT/p(S) \leq 1 + \varepsilon$
-        Given $\varepsilon > 0$, we'll run our algorithm with a new parameter $\delta = \frac{\varepsilon}{1 + \varepsilon}$. We can use the bound from Lemma 5.1 to see that
+        Given $\varepsilon > 0$, we'll run our algorithm with a new parameter $\delta = \frac{\varepsilon}{1 + \varepsilon} < 1$. We can use the bound from Lemma 5.1 to see that
         \begin{align*}
             % p(O) \cdot (1 - \delta) \leq p(S)
             \frac{p(O)}{p(S)} \leq \frac{1}{1-\delta}= \frac{1}{1 - \varepsilon/(1+\varepsilon)} = 1 + \varepsilon,
