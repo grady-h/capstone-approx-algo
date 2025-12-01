@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1763398004 "/Users/gradyhollar/Documents/School/fall_2025/capstone-approx-algo/LaTeX/notes/main.tex" "main.pdf" "main" 1763398005 0
-  "/Users/gradyhollar/Documents/School/fall_2025/capstone-approx-algo/LaTeX/notes/main.tex" 1763398004 29401 07dafbb5b3f727e828f15802a3494901 ""
+["pdflatex"] 1763405767 "/Users/gradyhollar/Documents/School/fall_2025/capstone-approx-algo/LaTeX/notes/main.tex" "main.pdf" "main" 1763405768 0
+  "/Users/gradyhollar/Documents/School/fall_2025/capstone-approx-algo/LaTeX/notes/main.tex" 1763405766 29535 c8e927dd41476be9f589c9b127bdf829 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -117,9 +117,9 @@
   "images/Cormen_TSP_b.png" 1763352719 78637 65cb0ee54d8d80d90782f617121346d5 ""
   "images/Cormen_TSP_c.png" 1763352719 111569 1944ea586c888eb4754b8936d951a1bc ""
   "images/Cormen_TSP_d.png" 1763352719 83013 2fb68c98d1ee5d84b0aaf7ab499765c5 ""
-  "main.aux" 1763398004 2875 279e44a8fbc87e6cb17b739eff485d3e "pdflatex"
-  "main.out" 1763398004 2254 ec1df710244688a5e6583fc4ed40caae "pdflatex"
-  "main.tex" 1763398004 29401 07dafbb5b3f727e828f15802a3494901 ""
+  "main.aux" 1763405767 2864 22e93dd18da2ecbdb62bc384bda3f5a4 "pdflatex"
+  "main.out" 1763405767 2190 12fa120ddec23934ab7d4624e1f749ed "pdflatex"
+  "main.tex" 1763405766 29535 c8e927dd41476be9f589c9b127bdf829 ""
   (generated)
   "main.aux"
   "main.log"

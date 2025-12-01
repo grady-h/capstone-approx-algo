@@ -116,7 +116,7 @@ The Traveling Salesperson Problem (TSP) is perhaps one of the best known NP-hard
 \end{figure}
 
 \newpage
-\noindent To place an approximation ratio on the cost of the resulting cycle $H$, we begin by first establishing a bound on the cost of the traversal $\mathcal{P}$. Then, since the triangle inequality holds in $G$, this ``short-cutting'' step we use to construct $H$ does not increase the cost of the traversal, and the same bound will hold for $H$. Let's flesh out this approach and prove our claimed approximation ratio.
+\noindent To place an approximation ratio on the cost of the resulting cycle $H$, we begin by first establishing a bound on the cost of the traversal $\mathcal{P}$. Then, since the triangle inequality holds in $G$, this ``short-cutting'' step we use to construct $H$ will not increase the cost of the traversal, and the same bound will hold for $H$. Let's flesh out this approach and prove our claimed approximation ratio.
 
 \begin{theorem}{3.1}{}
     \textsc{Approx-TSP} is a 2-factor approximation for the Metric-TSP problem.
@@ -132,7 +132,7 @@ The Traveling Salesperson Problem (TSP) is perhaps one of the best known NP-hard
     \end{proof}
 \end{theorem}
 
-\subsubsection{(Optional) Improving the ratio to 3/2}
+\subsubsection{Improving the ratio to 3/2}
 
 \noindent Another way to describe the above algorithm is through \textit{Eulerian tours}. Recall that an Eulerian tour of a graph is a cycle that visits every edge exactly once, allowing for revisited vertices. An equivalent formulation of \textsc{Approx-TSP} finds an MST, doubles each edge in the tree, performs an Eulerian tour on the doubled tree, then short-cuts the tour to find a Hamiltonian cycle. Is there a cheaper subgraph to perform an Eulerian tour on than the one obtained by doubling every edge in the MST?\\
 \\
@@ -142,24 +142,24 @@ Whether the 3/2 factor can be improved further is currently one of the biggest o
 
 \subsection{Inapproximability of General TSP}
 
-We devised our approximation for TSP under the assumption that the triangle inequality holds on its edge weights. While this holds true practically for many graphs, e.g. a network modeling roads and intersections where edge weights are lengths of roads, in complete generality, this is quite a big assumption. Can we still approximate TSP without this assumption?\\
+We devised our approximations for TSP under the assumption that the triangle inequality holds on the graph's edge weights. While this holds true practically for many graphs, e.g. a network modeling roads and intersections where edge weights are lengths of roads, in complete generality, this is quite a big assumption. Can we still approximate TSP without this assumption?\\
 \\
 As it turns out, the answer is almost certainly not. More formally, we'll prove that general TSP cannot be approximated at all, assuming $P \neq NP$. Results such as these are known as \textit{inapproximability} or \textit{hardness of approximation} results. These results show that, for some $NP$-hard optimization problems, approximating them past a certain factor would prove that $P = NP$. This is quite interesting, since as we will see later, other $NP$-hard optimization problems can be approximated arbitrarily well. In some sense, some problems are much harder to approximate than others.\\
 \\
-The general strategy for proving hardness of approximation results is to assume the existence of an approximation algorithm of a certain degree and to use the algorithm to create a decider for some known $NP$-hard problem. In the case of TSP, we will show that an approximation algorithm of \textit{any} factor can be used to decide the Hamiltonian cycle problem in polynomial time. Here, we let $n = |V|$, where $V$ is the vertex set of input graph for TSP.
+The general strategy for proving hardness of approximation results is to assume the existence of an approximation algorithm of a certain degree and to use the algorithm to create a decider for some known $NP$-hard problem. In the case of TSP, we will show that an approximation algorithm of \textit{any} factor can be used to decide the Hamiltonian cycle problem in polynomial time.
 
 \begin{theorem}{3.2}{}
     For any function $\rho(n) \geq 1$, TSP cannot be approximated within a factor of $\rho(n)$, unless $P = NP$.
 
     \begin{proof}
-        Assume for contradiction there is a factor $\rho(n)$ polynomial time approximation algorithm, $A$, for the general TSP problem. The key idea is a reduction from the Hamiltonian cycle problem to the TSP problem that takes a graph $G = (V,E)$ on $n$ vertices and transform it into a complete graph $G'$ on $n$ vertices such that
+        Assume for contradiction there is a factor $\rho(n)$ polynomial time approximation algorithm, $A$, for the general TSP problem. The key idea is a reduction from the Hamiltonian cycle problem to the TSP problem that takes a graph $G = (V,E)$ on $n$ vertices and transforms it into a complete graph $G'$ on $n$ vertices such that:\vspace{3pt}
         \begin{enumerate}
-            \item[(1)] If $G$ has a Hamiltonian cycle, the cost of an optimal TSP tour in $G'$ is $n$, and \vspace{3pt}
-            \item[(2)] If $G$ doesn't have a Hamiltonian cycle, the cost of an optimal TSP tour in $G'$ is strictly greater than $\rho(n) \cdot n$. \vspace{3pt}
+            \item[(1)] If $G$ \textit{does} have a Hamiltonian cycle, the cost of an optimal TSP tour in $G'$ is $n$, and \vspace{3pt}
+            \item[(2)] If $G$ \textit{doesn't} have a Hamiltonian cycle, the cost of an optimal TSP tour in $G'$ is strictly greater than $\rho(n) \cdot n$. \vspace{2pt}
         \end{enumerate}
         What happens when we run $A$ on our new graph $G'$? Since $A$ must produce a solution within $\rho(n)$ of the optimal, it must return a tour of cost $\leq \rho(n) \cdot n$ in the first case and $> \rho(n) \cdot n$ in the second. To decide whether the original graph $G$ had a Hamiltonian cycle, we simply need to compute the cost of the given TSP tour and compare it with $\rho(n) \cdot n$. So, if we can find such a reduction, $A$ can be used to solve the Hamiltonian cycle problem in polynomial time.\\
         \\
-        The reduction is quite simple. Let $G'$ be the complete graph on the same vertex set $V$, with edge weights defined as follows:
+        The reduction is quite simple. We construct $G'$ by completing the graph $G$ on the same vertex set $V$, with edge weights defined as follows: (notice that these edge weights will almost certainly not satisfy the triangle inequality!)
         \[
         c(u,v) =
         \begin{cases}
@@ -213,25 +213,25 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
         Y_i =
         \begin{cases}
             1, &\text{clause $i$ is satisfied}\\
-            0, &\text{otherwise}
-        \end{cases}.
+            0, &\text{otherwise}.
+        \end{cases}
         \]
         Then, the number of clauses satisfied overall is modeled by the random variable defined by
         \[
-        Y = \sum_{i=1}^m Y_i.
+        Y = \sum_{i=1}^m Y_i,
         \]
-        So, the expected cost of the algorithm will be exactly $E[Y]$. Since each literal is set to 1 with probability $1/2$ and 0 with probability $1/2$, and a clause is not satisfied only if all three of its literals are set to 0, we have
+        so that the expected cost of the algorithm will be exactly $\mathbb{E}[Y]$. Since each literal is set to 1 with probability $1/2$ and 0 with probability $1/2$, and a clause is not satisfied only if all three of its literals are set to 0, we have
         \[
         P[Y_i = 0] = (1/2)^3 = 1/8 \quad \Longrightarrow \quad P[Y_i = 1] = 1 - 1/8 = 7/8.
         \]
-        Computing $E[Y_i]$ then gives us
+        Computing $\mathbb{E}[Y_i]$ then gives us
         \[
-        E[Y_i] = 1 \cdot 7/8 + 0 \cdot 1/8 = 7/8.
+        \mathbb{E}[Y_i] = 1 \cdot 7/8 + 0 \cdot 1/8 = 7/8.
         \]
         Now we can use the familiar properties of expected values along with the above calculations to see that
         \begin{align*}
-            E[Y] &= E \left[ \sum_{i=1}^m Y_i \right]\\
-            &= \sum_{i=1}^{m} E[Y_i]\\
+            \mathbb{E}[Y] &= \mathbb{E} \left[ \sum_{i=1}^m Y_i \right]\\
+            &= \sum_{i=1}^{m} \mathbb{E}[Y_i]\\
             &= \sum_{i=1}^{m} 7/8\\
             &= 7m/8.
         \end{align*}
@@ -239,7 +239,7 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
     \end{proof}
 \end{theorem}
 
-\noindent The keen reader may have realized that in our proof we have not addressed an important possibility: what if a clause contains both a variable and its negation? Surely this will change the probabilities we calculated, and in turn the approximation factor, right? Let's show that, in fact, there is no need for such worries. 
+\noindent The keen reader may have realized that in our proof we have not addressed an important possibility: what if a clause contains both a variable and its negation? Surely this will change the probabilities we calculated, and in turn the approximation factor. Let's show that, in fact, there is no need for such worries. 
 
 % We began with two assumptions on the formula our algorithm considers. What happens if we relax these assumptions? First, let's allow our formula's clauses to contain both a variable and its negation, while still assuming each clause cannot contain repeated variables. For example, we'll allow clauses such as $(x_1 \lor \neg x_1 \lor x_2)$, but clauses such as $(x_1 \lor x_1 \lor x_2)$ are still not allowed.
 
@@ -252,9 +252,9 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
     \[
     Y = Y_1 + Y_2 + \cdots + Y_m + k.
     \]
-    The calculation of each $E[Y_i]$ is the same as before, and so
+    The calculation of each $\mathbb{E}[Y_i]$ is the same as before, and so
     \[
-    E[Y] = E \left[ \sum_{i=1}^{m} Y_i + k \right] = E \left[ \sum_{i=1}^{m} Y_i \right] + k = 7m/8 + k.
+    \mathbb{E}[Y] = \mathbb{E} \left[ \sum_{i=1}^{m} Y_i + k \right] = \sum_{i=1}^{m} \mathbb{E} \left[  Y_i \right] + k = 7m/8 + k.
     \]
     Since $m + k$ is the maximum number of clauses that can be satisfied, the approximation ratio is at most
     \[
@@ -332,7 +332,7 @@ Let $P = \max \{p(a): a \in A,\, p(a) \leq W\}$ be the value of the most profita
 \[
 DP(i, \ell) = 
 \begin{cases}
-    \min \{DP(i-1,\ell),\; DP(i-1, \ell - p(a_{i})) + w(a_{i})\} &\text{if $p(a_{i}) \leq \ell$}\\
+    \min \{DP(i-1,\ell),\; w(a_i) + DP(i-1, \ell - p(a_{i}))\} &\text{if $p(a_{i}) \leq \ell$}\\
     DP(i-1,\ell) &\text{otherwise,}
 \end{cases}
 \]
@@ -380,7 +380,7 @@ which gives rise to the following bottom-up DP algorithm.
             \For{$\ell=0$ \textbf{to} $nP$}
                 \State $add = \infty$
                 \If{$p(a_{i}) \leq \ell$}
-                    \State $add = DP(i-1,\ell - p(a_i)) + w(a_i)$
+                    \State $add = w(a_i) + DP(i-1,\ell - p(a_i))$
                 \EndIf
                 \State $leaveOut = DP(i-1,\ell)$
                 \State $DP(i,\ell) = \min\{add,\; leaveOut\}$
@@ -394,7 +394,7 @@ which gives rise to the following bottom-up DP algorithm.
     \end{algorithmic}
 \end{algorithm}
 
-\noindent But wait... Doesn't this solve the Knapsack problem in polynomial time? Not quite. Notice that the runtime of $O(n^2P)$ depends polynomially on the maximum profit $P$.  But since this profit could be arbitrarily large with respect to $n$ (potentially $\displaystyle n! \cdot 2^{n^2}$ large, for instance!), this is not a true polynomial-bounded runtime. When an algorithm is polynomially bounded in both its input and its \textit{numerical parameters} like the one above, we call it a \textit{psuedo-polynomial time algorithm}.\\
+\noindent But wait... Doesn't this solve the Knapsack problem in polynomial time? Not quite. Notice that the runtime of $O(n^2P)$ depends on the maximum profit $P$.  But since this profit could be arbitrarily large with respect to $n$ (potentially $\displaystyle n! \cdot 2^{n^2}$ large, for instance!), this is not a true polynomial-bounded runtime. When an algorithm is polynomially bounded in both its input size and its \textit{numerical parameters} like the one above, we call it a \textit{psuedo-polynomial time algorithm}.\\
 \\
 If it just so happened that $P = q(n)$ for some polynomial $q$, then our algorithm will in fact run in polynomial time. To obtain an FPTAS, we are going to exploit precisely this fact by ignoring a certain number of least significant bits of the profits of our objects to ensure $P$ will be small enough.
 
@@ -409,7 +409,7 @@ If it just so happened that $P = q(n)$ for some polynomial $q$, then our algorit
     \end{algorithmic}
 \end{algorithm}
 
-\noindent To show that this is indeed an FPTAS, we begin by placing a bound on the approximation ratio of the algorithm.
+\noindent To show that this is indeed an FPTAS, we begin by placing a bound on its approximation ratio.
 
 \begin{lemma}{5.1}{}
     Fix some $0 < \varepsilon < 1$. Let $S$ be the solution returned by \textsc{Knapsack-FPTAS} run with parameter $\varepsilon$, and let $O$ be the true optimal solution. Then,
@@ -442,7 +442,7 @@ If it just so happened that $P = q(n)$ for some polynomial $q$, then our algorit
         % \begin{align*}
         %     p(S) = \sum_{a \in S} p(a) \geq \sum_{a \in S} K \cdot \Big\lfloor \frac{p(a)}{K} \Big\rfloor \geq \sum_{a \in O} K \cdot \Big\lfloor \frac{p(a)}{K} \Big\rfloor \geq \sum_{a \in O} \big(\,p(a) - K\,\big) \geq p(O) - nK
         % \end{align*}
-        Finally, by noting that $P \leq p(O)$ since naively picking the single most profitable object is a feasible solution, we see that
+        Finally, by noting that $P \leq p(O)$, since naively picking the single most profitable object is a feasible solution, we see that
         \begin{align*}
             p(S) \geq p(O) - nK = p(O) - \varepsilon P \geq p(O) \cdot (1 - \varepsilon),
         \end{align*}
@@ -453,7 +453,7 @@ If it just so happened that $P = q(n)$ for some polynomial $q$, then our algorit
 \noindent With the lemma done, we are ready for the final proof.
 
 \begin{theorem}{5.2}{}
-    \textsc{Knapsack-FPTAS} is a fully polynomial approximation scheme for the Knapsack problem.
+    \textsc{Knapsack-FPTAS} is a fully polynomial time approximation scheme for the Knapsack problem.
     
     \begin{proof}
         % With the adjusted profits, the running time of the call to \textsc{Knapsack-DP} is $O(n^2 \big\lfloor \frac{P}{K} \big\rfloor) = O(n^2 \big\lfloor \frac{n}{\varepsilon} \big\rfloor)$, which is polynomial in $n$ and $1/\varepsilon$. So, it remains to show that $OPT/p(S) \leq 1 + \varepsilon$
