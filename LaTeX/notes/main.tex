@@ -1,10 +1,13 @@
 \documentclass{article}
 
+\usepackage{graphicx, amsmath, amsthm, amssymb, enumitem, lipsum, algorithm, caption, fancyhdr}
 \usepackage[margin=1in]{geometry}
-\usepackage{graphicx, amsmath, amsthm, amssymb, enumitem, lipsum, algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage[hidelinks]{hyperref}
 % \usepackage[hang]{footmisc}
+
+% periods instead of colons for algorithm line numbers
+\algrenewcommand\alglinenumber[1]{\footnotesize #1.}
 
 \setlist[enumerate]{leftmargin=1.25cm, nosep}
 
@@ -42,37 +45,77 @@
 \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 
 
-\title{CS 4980: Capstone Research\\
-        Notes}
-\author{Professor Mark Floryan,\\
-        compiled by Grady Hollar}
-\date{Fall 2025}
+
+
+
+% \title{CS 4980: Capstone Research\\
+%         Notes}
+% \author{Professor Mark Floryan,\\
+%         compiled by Grady Hollar}
+% \date{Fall 2025}
+
+
 
 \begin{document}
 \setlength{\abovedisplayskip}{4pt}
 \setlength{\belowdisplayskip}{4pt}
-\maketitle
+% \maketitle
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[L]{\textsc{University of Virginia}}
+\fancyhead[C]{\textsc{CS 4980: Capstone Research}}
+\fancyhead[R]{\textsc{Fall 2025 - Spring 2026}}
+
+\begin{center}
+    \Large
+    {\textbf{An Introduction to Approximation Algorithms}}\\
+    \vspace{3pt}
+    \normalsize 
+    % \textsc{University of Virginia, CS 4980: Capstone Research}\\
+    \textsc{Capstone Student: Grady Hollar (vhe5ak),}\\
+    \textsc{Capstone Professor: Mark Floryan (mrf8t)}
+\end{center}
 
 
 
-\section{Basic Definitions}
+\section{Intro / Basic Definitions}
 
-What is an approximation algorithm?
+\noindent Many problems of interest in computer science are those which ask us to produce optimal solutions. Some of these problems can be solved in polynomial time. For example:
+\begin{center}
+    Given an unweighted graph $G = (V,E)$ and two vertices $s,t \in V$,\\
+    what is the shortest path between $s$ and $t$?
+\end{center}
+Here, a simple breadth-first-search on $G$ will give the optimal solution in $O(|V| + |E|)$ time. Others, however, are not so easy:
+\begin{center}
+    Given a map $M$, what is the minimum number of colors needed\\ to color $M$ so that no two neighboring regions share the same color? 
+\end{center}
+For problems like the one above, we currently have no hope in developing algorithms that would be able to produce optimal solutions efficiently. But what if we could get ``close'' to an optimal solution in polynomial time? This is the question that motivates the study of approximation algorithms.
+
+\begin{definition}{(Optimization Problem)}{}
+    
+\end{definition}
+
+\begin{definition}{(Approximation Algorithm)}{}
+    
+\end{definition}
 
 \section{Basic Examples}
 
 
 Vertex cover, set cover?
 
-
+\newpage
 
 \section{The Traveling Salesperson Problem}
 
 \subsection{Metric TSP}
 
-The Traveling Salesperson Problem (TSP) is perhaps one of the best known NP-hard optimization problems in all of computer science. Informally, it asks, given a list of cities and distances between each pair of cities, what is the shortest route that visits every city exactly once and starts and ends at the same city? In the version of the problem we consider, we will further require that the \textit{triangle inequality} holds for all distances between cities. This is an important distinction that we will touch on more later. Formally, this problem is known as \textit{Metric}-TSP, and is proposed as follows:
+\subsubsection{A basic 2-factor Algorithm}
 
-\begin{envsection}{Optimization Problem (Metric-TSP)}
+The Traveling Salesperson Problem (TSP) is perhaps one of the best known NP-hard optimization problems in all of computer science. Informally, it asks, given a list of cities and distances between each pair of cities, what is the shortest route that visits every city exactly once and starts and ends at the same city? In the version of the problem we consider, we will further require that the \textit{triangle inequality} holds for all distances between cities. This is an important distinction that we will touch on more later. Formally, this problem is known as \textit{Metric} TSP, and is proposed as follows:
+
+\begin{envsection}{Optimization Problem (Metric TSP).}
     Given a complete undirected graph $G = (V,E)$ and cost function $c: E \to \Q^+$ such that the triangle inequality holds for all $u,v,w \in V$:
     \[
     c(u,v) \leq c(u,w) + c(w,v),
@@ -80,23 +123,23 @@ The Traveling Salesperson Problem (TSP) is perhaps one of the best known NP-hard
     find a minimum cost cycle in $G$ that visits every vertex exactly once.
 \end{envsection}
 
-\noindent In this section, we'll devise a 2-factor approximation algorithm for Metric-TSP. Our approach revolves around finding a minimum spanning tree of $G$ and constructing a cycle using the MST. The algorithm works as follows:
+\noindent In this section, we'll devise a 2-factor approximation algorithm for Metric TSP. Our approach revolves around finding a minimum spanning tree of $G$ and constructing a cycle using the MST. The algorithm works as follows:
 
 \begin{algorithm}
     \renewcommand{\thealgorithm}{}
     \caption{\textsc{Approx-TSP}$(G,c)$}
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
         % \State Select an arbitrary $v \in G.V$ to be a ``root''
         \State Compute a minimum spanning tree $T$ of $G$.
         \State Perform a preorder traversal $\mathcal{P}$ of $T$.
-        \State Construct a Hamiltonian cycle $H$ by listing the vertices of $G$ in the order of their first appearance in $\mathcal{P}$.
-        \State \Return $H$
+        \State Construct a Hamiltonian cycle $\mathcal{H}$ by listing the vertices of $G$ in the order of their first appearance in $\mathcal{P}$.
+        \State \Return $\mathcal{H}$
     \end{algorithmic}
 \end{algorithm}
 
-\noindent Below is a depiction of the algorithm in action. Figure (a) is the original complete graph $G$, with Figure (b) showing a minimum spanning tree $T$ of $G$. Figure (c) outlines the preorder traversal $\mathcal{P}$ of $T$. Lastly, Figure (d) is the resulting Hamiltonian cycle $H$ constructed from $\mathcal{P}$, where the backtracking steps have been ``short-cut'' for more direct paths.  
+\noindent Below is a depiction of the algorithm in action. Figure (a) is the original complete graph $G$, with Figure (b) showing a minimum spanning tree $T$ of $G$. Figure (c) outlines the preorder traversal $\mathcal{P}$ of $T$. Lastly, Figure (d) is the resulting Hamiltonian cycle $\mathcal{H}$ constructed from $\mathcal{P}$, where the backtracking steps have been ``short-cut'' for more direct paths.  
 
-\begin{figure}[ht]
+\begin{figure}[h]
     \begin{minipage}{0.25\textwidth}
      \centering
      \includegraphics[width=1.75in]{images/Cormen_TSP_a.png}
@@ -113,20 +156,21 @@ The Traveling Salesperson Problem (TSP) is perhaps one of the best known NP-hard
      \centering
      \includegraphics[width=1.75in]{images/Cormen_TSP_d.png}
    \end{minipage}
+   \caption{The stages of \textsc{Approx-TSP}}
 \end{figure}
 
-\newpage
-\noindent To place an approximation ratio on the cost of the resulting cycle $H$, we begin by first establishing a bound on the cost of the traversal $\mathcal{P}$. Then, since the triangle inequality holds in $G$, this ``short-cutting'' step we use to construct $H$ will not increase the cost of the traversal, and the same bound will hold for $H$. Let's flesh out this approach and prove our claimed approximation ratio.
+% \newpage
+\noindent To place an approximation ratio on the cost of the resulting cycle $\mathcal{H}$, we begin by first establishing a bound on the cost of the traversal $\mathcal{P}$. Then, since the triangle inequality holds in $G$, this ``short-cutting'' step we use to construct $\mathcal{H}$ will not increase the cost of the traversal, and the same bound will hold for $\mathcal{H}$. Let's flesh out this approach and prove our claimed approximation ratio.
 
 \begin{theorem}{3.1}{}
-    \textsc{Approx-TSP} is a 2-factor approximation for the Metric-TSP problem.
+    \textsc{Approx-TSP} is a 2-factor approximation for the Metric TSP problem.
 
     \begin{proof}
         There are numerous well-established and efficient algorithms to compute minimum spanning trees, so the algorithm clearly runs in polynomial time. Now, lets first consider the optimal tour $O$. Since $O$ visits each vertex of $G$ exactly once, deleting any edge from $O$ will produce a spanning tree of $G$. Since $T$ is a \textit{minimum} spanning tree, it follows that $c(T) \leq c(O)$.\\
         \\
-        Next, note that since the traversal $\mathcal{P}$ contains each edge of $T$ exactly twice, the cost of $\mathcal{P}$ is precisely double that of the cost of $T$, or rather, $c(\mathcal{P}) = 2 \cdot c(T)$. Finally, as noted above, the triangle inequality guarantees that $c(H) \leq c(\mathcal{P})$. Combining these inequalities, we have 
+        Next, note that since the traversal $\mathcal{P}$ contains each edge of $T$ exactly twice, the cost of $\mathcal{P}$ is precisely double that of the cost of $T$, or rather, $c(\mathcal{P}) = 2 \cdot c(T)$. Finally, as noted above, the triangle inequality guarantees that $c(\mathcal{H}) \leq c(\mathcal{P})$. Combining these inequalities, we have 
         \[
-        c(H) \leq c(\mathcal{P}) = 2 \cdot c(T) \leq 2 \cdot c(O),
+        c(\mathcal{H}) \leq c(\mathcal{P}) = 2 \cdot c(T) \leq 2 \cdot \text{OPT},
         \]
         which establishes the desired approximation ratio.
     \end{proof}
@@ -134,17 +178,90 @@ The Traveling Salesperson Problem (TSP) is perhaps one of the best known NP-hard
 
 \subsubsection{Improving the ratio to 3/2}
 
-\noindent Another way to describe the above algorithm is through \textit{Eulerian tours}. Recall that an Eulerian tour of a graph is a cycle that visits every edge exactly once, allowing for revisited vertices. An equivalent formulation of \textsc{Approx-TSP} finds an MST, doubles each edge in the tree, performs an Eulerian tour on the doubled tree, then short-cuts the tour to find a Hamiltonian cycle. Is there a cheaper subgraph to perform an Eulerian tour on than the one obtained by doubling every edge in the MST?\\
+\noindent Another way to describe the above algorithm is through \textit{Eulerian tours}. Recall that an Eulerian tour of a graph is a cycle that visits every edge exactly once, allowing for revisited vertices. An equivalent formulation of \textsc{Approx-TSP} finds an MST, doubles each edge in the tree, performs an Eulerian tour on the doubled tree, then short-cuts the tour to find a Hamiltonian cycle. Is there a cheaper graph to perform an Eulerian tour on than the one obtained by doubling every edge in the MST?\\
 \\
-A key result in graph theory is that a connected graph has an Eulerian tour if and only if every vertex has even degree. So, we only need to concern ourselves with somehow ``remedying'' the odd degree vertices in the MST to obtain a subgraph with an Eulerian tour. Using this idea, it's possible to produce an algorithm with a 3/2 approximation factor for Metric-TSP. Readers interested in the details are encouraged to read Section 3.2 in Vazirani's \textit{Approximation Algorithms}.\\
-\\
-Whether the 3/2 factor can be improved further is currently one of the biggest open problems within the field of approximation algorithms.
+A key result in graph theory is that a connected graph has an Eulerian tour if and only if every vertex has even degree. So, we only need to concern ourselves with somehow ``remedying'' the odd-degree vertices in the MST to obtain a an Eulerian graph. The way we remedy these vertices is by using a \textit{perfect matching}. A perfect matching is quite similar in notion to a bipartite matching, which the reader should be familiar with, but for the sake clarity, let's give the definition in full generality.
 
-\subsection{Inapproximability of General TSP}
+\begin{definition}{(Perfect Matching)}{}
+    Given an undirected graph $G = (V,E)$ and subset $U \subseteq V$, a \textit{perfect matching on $U$} is a subset $M \subseteq E$ such that every vertex in $U$ is incident to exactly one edge from $M$.
+\end{definition}
+
+\noindent Now, what happens if we find a perfect matching on the odd-degree vertices of the MST and construct a new graph by adding in these edges to the tree? Since the matching is perfect, every odd vertex's degree will increase by 1, and we obtain a graph with all even-degree vertices.\\
+\\
+\textbf{Note!} This is only true if we allow for doubled edges within our graph: if an edge from the matching was already in the MST to begin with, we must double that edge when adding the matching to the original tree in order to increase the relevant vertices' degrees.\\
+\\
+Regardless, we now have a graph that we can perform an Eulerian tour on! The approach we have just described is \href{https://en.wikipedia.org/wiki/Christofides_algorithm}{\underline{due to  Christofides}}. Using his idea, it's possible to ensure a 3/2 approximation guarantee for Metric TSP.
+
+\begin{algorithm}
+    \renewcommand{\thealgorithm}{}
+    \caption{\textsc{Christofides-TSP}$(G,c)$}
+    \begin{algorithmic}[1]
+        % \State Select an arbitrary $v \in G.V$ to be a ``root''
+        \State Compute a minimum spanning tree $T$ of $G$.
+        \State Compute a minimum cost perfect matching, $M$, on the odd-degree vertices of $T$, and set $E = T \cup M$, doubling edges as needed.
+        \State Perform an Eulerian tour $\mathcal{T}$ of $E$.
+        \State Construct a Hamiltonian cycle $\mathcal{H}$ by listing the vertices of $G$ in the order of their first appearance in $\mathcal{T}$.
+        \State \Return $\mathcal{H}$
+    \end{algorithmic}
+\end{algorithm}
+
+\noindent To prove the claimed approximation ratio, we'll need a couple preliminary results. First, how can we be sure that the odd vertices of $T$ have a perfect matching in the first place? Our first lemma will help show that a matching always exists. 
+
+\begin{lemma}{3.2}{}
+    The number of odd-degree vertices in any undirected graph is even.
+
+    \begin{proof}
+        Let's quickly recall that the \textit{handshake lemma} tells us the sum of degrees of all vertices in an undirected graph must be even. From this, our claim follows immediately. If there were an odd number of odd-degree vertices, then the total sum of vertex degrees would be odd, which is impossible.
+        % Alternate Proof by Induction: (basically reproving the handshake lemma)
+        % We'll fix the number of vertices $n = |V|$ and induct on the number of edges, $m = |E|$, of $G$. For $m=1$, there are exactly two vertices of degree 1---the two incident to the single edge---with the remaining having degree 0, so the claim holds.\\
+        % \\
+        % Suppose the claim holds for $m \geq 1$, and suppose $G$ has $m+1$ edges. If we remove any $(u,v) \in E$, we obtain a graph for which the claim holds. What happens when we add $(u,v)$ back? If $u$ and $v$ were both even-degree, the number of odd vertices will increase by 2. If $u$ and $v$ were both odd, the count will decrease by 2. If one of $u$ and $v$ were even and the other odd, then the count will remain unchanged. In all cases, the number of odd-degree vertices changes by 2, and the lemma holds by induction.
+    \end{proof}
+\end{lemma}
+
+\noindent It turns out that this is all we need to guarantee that $M$ can be constructed! This is because any complete undirected graph with an even number of vertices will always have at least one perfect matching: we can simply divide its vertices into pairs any way we'd like, and the corresponding edges will form a perfect matching.\\
+
+\noindent Now, the key step of proving our claimed approximation ratio revolves around placing a bound on the matching that we add to the tree. Note that our algorithm chooses a \textit{minimum cost} perfect matching to add to $T$. The reason for this distinction will become clear in our proof.
+
+\begin{lemma}{3.3}{}
+    Let $G = (V,E)$ be a graph given as an instance of the Metric TSP problem. Let $U \subseteq V$ such that $|U|$ is even, and let $M$ be a minimum cost perfect matching on $U$. Then, $c(M) \leq \text{OPT}/2$.\\
+    \\
+    \textit{Proof.} Let $\tau$ be an optimal TSP tour of $G$. Construct a tour $\tau'$ of $U$ by listing the vertices of $U$ in order of their appearance in $\tau$. By the triangle inequality, we know that $c(\tau') \leq c(\tau)$. Now, note that since $|U|$ is even, $\tau'$ is the union of two perfect matchings of $U$, say $M_1$ and $M_2$, each consisting of alternating edges of $\tau$. Note also that the smaller-cost of the two must be at most $c(\tau')/2$. Lastly, since $M$ is a \textit{minimum} perfect matching, it follows that
+    \[
+        c(M) \leq \min \{c(M_1),c(M_2)\} \leq c(\tau')/2 \leq \text{OPT}/2.\quad \Box
+        \]
+\end{lemma}
+
+\noindent Figure 2 visualizes the steps of our proof, depicting the full tour $\tau$ of $G$ and the shorter tour $\tau'$ of $U$, showing how $\tau'$ can be split into the two perfect matchings $M_1$ and $M_2$.\\
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=2.75in]{images/TSP_lemma_diagram_v2.drawio.png}
+    \caption{Construction of $\tau'$ from $\tau$.}
+\end{figure}
+
+\noindent Since we already showed the number of odd-degree vertices of $T$ is even, Lemma 3.3 gives us a bound on the cost of the matching $M$ that the algorithm finds. Using this bound, we can show the final approximation guarantee.
+
+\begin{theorem}{3.4}{}
+    \textsc{Christofides-TSP} is a $3/2$-factor approximation for the Metric TSP problem.
+
+    \begin{proof}
+        Though they are quite complex in nature, there are known efficient algorithms to calculate minimum-cost perfect matchings,\footnote{An in-depth treatment of one such algorithm can be found \href{https://courses.grainger.illinois.edu/cs598csc/sp2010/Lectures/Lecture11.pdf}{\underline{here}}.} so the algorithm runs in polynomial time. As stated above, our lemmas show that $c(M) \leq \text{OPT}/2$. We also already showed in Theorem 3.1 that $c(T) \leq \text{OPT}$. Now, since the Eulerian tour $\mathcal{T}$ visits every edge of $T$ and $M$ exactly once, we know that $c(\mathcal{T}) = c(T) + c(M)$. Further, by the triangle inequality, the cost of the Hamiltonian cycle $\mathcal{H}$ is bounded above by $c(\mathcal{T})$. Putting everything together, we have
+        \[
+        c(\mathcal{H}) \leq c(\mathcal{T}) = c(T) + c(M) \leq \text{OPT} + \frac{1}{2} \text{OPT} = \frac{3}{2} \text{OPT},
+        \]
+        as desired.
+    \end{proof}
+\end{theorem}
+
+
+\noindent Whether the 3/2 factor can be improved further is currently one of the biggest open problems within the field of approximation algorithms.
+
+\subsection{Inapproximability of general TSP}
 
 We devised our approximations for TSP under the assumption that the triangle inequality holds on the graph's edge weights. While this holds true practically for many graphs, e.g. a network modeling roads and intersections where edge weights are lengths of roads, in complete generality, this is quite a big assumption. Can we still approximate TSP without this assumption?\\
 \\
-As it turns out, the answer is almost certainly not. More formally, we'll prove that general TSP cannot be approximated at all, assuming $P \neq NP$. Results such as these are known as \textit{inapproximability} or \textit{hardness of approximation} results. These results show that, for some $NP$-hard optimization problems, approximating them past a certain factor would prove that $P = NP$. This is quite interesting, since as we will see later, other $NP$-hard optimization problems can be approximated arbitrarily well. In some sense, some problems are much harder to approximate than others.\\
+As it turns out, the answer is almost certainly not. More formally, we'll prove that general TSP cannot be approximated at all, assuming $P \neq NP$. Results such as these are known as \textit{inapproximability} or \textit{hardness of approximation} results. These results show that, for some $NP$-hard optimization problems, approximating them past a certain factor would prove that $P = NP$. This is quite interesting since, as we will see later, other $NP$-hard optimization problems can be approximated arbitrarily well. In some sense, some problems are much harder to approximate than others.\\
 \\
 The general strategy for proving hardness of approximation results is to assume the existence of an approximation algorithm of a certain degree and to use the algorithm to create a decider for some known $NP$-hard problem. In the case of TSP, we will show that an approximation algorithm of \textit{any} factor can be used to decide the Hamiltonian cycle problem in polynomial time.
 
@@ -159,7 +276,7 @@ The general strategy for proving hardness of approximation results is to assume 
         \end{enumerate}
         What happens when we run $A$ on our new graph $G'$? Since $A$ must produce a solution within $\rho(n)$ of the optimal, it must return a tour of cost $\leq \rho(n) \cdot n$ in the first case and $> \rho(n) \cdot n$ in the second. To decide whether the original graph $G$ had a Hamiltonian cycle, we simply need to compute the cost of the given TSP tour and compare it with $\rho(n) \cdot n$. So, if we can find such a reduction, $A$ can be used to solve the Hamiltonian cycle problem in polynomial time.\\
         \\
-        The reduction is quite simple. We construct $G'$ by completing the graph $G$ on the same vertex set $V$, with edge weights defined as follows: (notice that these edge weights will almost certainly not satisfy the triangle inequality!)
+        The reduction is quite simple. We construct $G'$ by completing the graph $G$ on the same vertex set $V$, with edge weights defined as follows: (notice that these weights will almost certainly not satisfy the triangle inequality!)
         \[
         c(u,v) =
         \begin{cases}
@@ -182,7 +299,7 @@ Let's take a moment to remember the most fundamental NP-complete problem of them
 is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the SAT problem asks whether we can find an assignment for its variables such that the formula evaluates to true. In the optimization version of this decision problem, we'll instead try to satisfy as many clauses in the formula as possible.
 
 \begin{envsection}{Optimization Problem (MAX-$3$SAT)}
-    Given a 3-CNF formula $\phi$, find an assignment of $\phi$ that satisfies the largest number of clauses.\footnote{In classical literature, the definition of a $k$-CNF formula only requires each clause to contain \textit{at most} $k$ literals, not exactly $k$. Adding in this extra condition as we have is formally known as MAX-E$k$SAT, with the E standing for ``exactly''. It turns out, however, that the usual formal version of the MAX-3SAT problem \textit{still} admits an approximate solution with a factor identical to the one we are about to show for MAX-E3SAT, but the proof of this is far beyond the scope of this writeup. The interested reader may wish to look into the ``Karloff-Zwick algorithm''.}
+    Given a 3-CNF formula $\phi$, find an assignment of $\phi$ that satisfies the largest number of clauses.\footnote{In classical literature, the definition of a $k$-CNF formula only requires each clause to contain \textit{at most} $k$ literals, not exactly $k$. Adding in this extra condition as we have is formally known as MAX-E$k$SAT, with the E standing for ``exactly''. It turns out, however, that the usual formal version of the MAX-3SAT problem \textit{still} admits an approximate solution with a factor identical to the one we are about to show for MAX-E3SAT, but the proof of this is far beyond the scope of this writeup. The interested reader may wish to look into the \href{https://www.cs.umd.edu/~gasarch/BLOGPAPERS/max3satu.pdf}{\underline{Karloff-Zwick algorithm}}.}
 \end{envsection}
 %  We'll also concern ourselves only with 3-CNF formulas, since the general SAT problem can be reduced to 3-SAT (source?).\\
 \noindent How good of a solution could we get to the above problem by setting each variable in the given formula completely randomly? We'll soon see that, on average, this simple approach will surprisingly get us close to an optimal solution---quite close, in fact! But what do we mean by ``on average?'' We need to formalize what it means to have an approximation factor when our algorithm involves an element of randomization.
@@ -196,7 +313,7 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
 \begin{algorithm}
     \renewcommand{\thealgorithm}{}
     \caption{\textsc{Approx-MAX-3SAT}$(\phi)$}
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
         \For{$x_i \in \phi$}
             \State Assign $x_i$ randomly to be 0 or 1 with equal probability 1/2.
         \EndFor
@@ -264,14 +381,31 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
 
 \noindent Interestingly, it has been shown that, assuming $P \neq NP$, no polynomial-time algorithm for MAX-3SAT can achieve an approximation ratio strictly better than $8/7$.\footnote{The full proof of this incredible fact is far beyond the scope of this writeup, but the interested reader can begin to learn more \href{https://en.wikipedia.org/wiki/MAX-3SAT}{\underline{here}}.} So, in the end, our somewhat naive approach gave us essentially the best solution we could hope for!
 
-\subsection{Weighted vertex cover and LP rounding}
+\subsection{Weighted Vertex Cover and LP-rounding}
+
+Many $NP$-hard optimization problems we consider can be modeled as \textit{integer programs} (or \textit{IP}s). An integer program is identical to a linear program, with the added constraint that its variables may only take integer values. As opposed to the problem of linear programming, which is in $P$,\footnote{We should note here that, interestingly, the simplex algorithm we covered earlier in the semester does \textit{not} actually give a fully polynomial time solution for linear programming. Though efficient in practice, \href{https://sophie.huiberts.me/files/Klee-Minty-How-Good-Is-the-Simplex-Algorithm-1970.pdf}{\underline{LPs can be constructed}} that take exponential time using simplex. For a true polynomial time algorithm, readers may be interested in learning about the \href{https://www.cs.princeton.edu/courses/archive/fall05/cos521/ellipsoid.pdf}{\underline{ellipsoid algorithm}}.} finding optimal solutions to integer programs is $NP$-hard (the very fact we can formulate $NP$-hard problems as integer programs proves this). But it turns out we can leverage the efficiency of linear programming to find \textit{near}-optimal solutions for integer programs in polynomial time using a technique known as \textit{LP-rounding}.\\
+\\
+LP-rounding involves formulating an optimization problem as an IP, relaxing the integer constraints to turn the IP into an LP, producing an optimal solution the LP-relaxation, and constructing a feasible solution to the original IP by rounding the variables of the LP solution. To see LP-rounding in action, we'll look at a modified version of Minimum Vertex Cover, where each vertex now has with it an associated weight.
 
 \begin{envsection}{Optimization Problem (Min-Weight Vertex Cover)}
     Given an undirected graph $G = (V,E)$ and a weight function on vertices $w: V \to \Q^+$, find a vertex cover $C \subseteq V$ of minimum weight $w(C) = \sum_{v \in C} w(v)$.
 \end{envsection}
 
-\noindent Consider the following linear program:
+\noindent Our earlier approximation to the usual unweighted vertex cover problem will not work here, since minimizing the number of vertices in the cover does not necessarily minimize its weight. Instead, we'll use LP-rounding to approximate the problem. Let's consider the following integer program:
+\vspace{1ex}
+\begin{flalign*}
+    &\qquad\qquad\text{minimize } \qquad \sum_{v \in V} w(v) \cdot x_v &\\
+\end{flalign*}
+\vspace{-30pt}
+\begin{flalign*}
+    \qquad\qquad\text{subject to} \qquad x_u + x_v &\geq 1 \qquad\;\;\,\forall (u,v) \in E &\\
+    x_v &\in \{0,1\} \quad \forall v \in V 
+\end{flalign*}
 
+\noindent Notice that a feasible solution to the above program corresponds exactly to a feasible solution to min-weight vertex cover, where the corresponding cover will include vertex $v$ if $x_v = 1$ and exclude $v$ if $x_v = 0$. The constraint $x_u + x_v \geq 1$ ensures that this will indeed be a cover, since it forces every edge $(u,v) \in E$ to have at least one of its endpoints included in the cover. Notice also that the solution's objective function value is precisely the corresponding cover's weight.\\
+\\
+\noindent Now, we construct the \textit{LP-relaxation} of the above IP by allowing its variables to take any real values within $[0,1]$:
+\vspace{1ex}
 \begin{flalign*}
     &\qquad\qquad\text{minimize } \qquad \sum_{v \in V} w(v) \cdot x_v &\\
 \end{flalign*}
@@ -282,13 +416,14 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
     x_v &\geq 0 \quad \forall v \in V &
 \end{flalign*}
 
+\noindent This is the LP we'll use to construct approximate solutions to the weighted vertex cover problem.
 
 \begin{algorithm}
     \renewcommand{\thealgorithm}{}
     \caption{\textsc{Approx-Min-Weight-VC}$(G, w)$}
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
         \State $C = \emptyset$
-        \State Compute an optimal solution $\overline{x}$ to $G$'s associate linear program.
+        \State Compute an optimal solution $\overline{x}$ to the above LP-relaxation.
         \For{$v \in G.V$}
             \If{$\overline{x}_v \geq 1/2$}
                 \State $C = C \cup \{v\}$
@@ -297,21 +432,25 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
         \State \Return $C$
     \end{algorithmic}
 \end{algorithm}
-
+\vspace{-2ex}
 \begin{theorem}{2.2}
-    \textsc{Approx-Min-Weight-VC} is a 2-approximation algorithm for the minimum weight vertex cover problem.
+    \textsc{Approx-Min-Weight-VC} is a 2-approximation algorithm for the Min-Weight Vertex Cover problem.
 
     \begin{proof}
-        Want to show:\vspace{3pt}
-        \begin{enumerate}
-            \item[] Why is $C$ a cover?\vspace{3pt}
-            \item[] Compare an optimal cover $C^*$ to the objective function value for optimal solution of the LP $z^*$. Obtain $z^* \leq w(C^*)$. ($C^*$ is a feasible solution to the LP)\vspace{3pt}
-            \item[] Obtain $z^* \geq w(C)/2$. Key step:
-                \[
-                z^* \geq \sum_{v \in V: \overline{x}_v \geq 1/2} w(v) \cdot \overline{x}_v
-                \]
-            \item[] Combine inequalities to get $w(C) \leq 2w(C^*)$.
-        \end{enumerate}
+        First, why will the constructed set $C$ actually form a cover? In the LP-relaxation, notice the first constraint ensures that for every edge $(u,v) \in E$, at least one of $x_u$ or $x_v$ must be at least $1/2$: if they were both less than $1/2$, the inequality would not be satisfied. But, by construction, this precisely means that every edge will have at least one of its vertices included in $C$.\\
+        \\
+        Now, let $C^*$ an optimal cover and let $z^*$ be the objective function value for the optimal solution of the LP-relaxation. We'll use $z^*$ to place bounds on the weights of $C^*$ and $C$. First, since $C^*$ corresponds to an optimal solution of the IP, and this solution is also feasible for the LP-relaxation, it follows that $z^* \leq w(C^*)$.\\
+        \\
+        \noindent Next, using a bit of clever summation tricks, we can show that performing the rounding step in our algorithm doesn't take us more than 2 factors away from the optimal LP-solution:
+        \begin{align*}
+            z^* &= \sum_{v \in V} w(v) \cdot \overline{x}_v \;\, \geq \sum_{\substack{v \in V,\\ \overline{x}_v \geq 1/2}} w(v) \cdot \overline{x}_v \;\, \geq \sum_{\substack{v \in V,\\ \overline{x}_v \geq 1/2}} w(v) \cdot \frac{1}{2} \;\; \geq \;\; \frac{1}{2} w(C).
+        \end{align*}
+        Intuitively this makes sense, as rounding a variable up to 1 at most doubles it, and rounding a variable down to 0 ensures it does not contribute to the objective function at all.
+        Now, putting the two inequalities together, we have
+        \[
+        \frac{1}{2} w(C) \leq z^* \leq w(C^*),
+        \]
+        proving the desired ratio.
     \end{proof}
 \end{theorem}
 
@@ -349,7 +488,7 @@ which gives rise to the following bottom-up DP algorithm.
 % \begin{algorithm}
 %     \renewcommand{\thealgorithm}{}
 %     \caption{\textsc{Knapsack-DP}$(A, w, p, W)$}
-%     \begin{algorithmic}
+%     \begin{algorithmic}[1]
 %         \State initialize $DP$
 %         \For{$i=0$ \textbf{to} $n$}
 %             \For{$c=0$ \textbf{to} $W$}
@@ -373,7 +512,7 @@ which gives rise to the following bottom-up DP algorithm.
 \begin{algorithm}
     \renewcommand{\thealgorithm}{}
     \caption{\textsc{Knapsack-DP}$(A, w, p, W, P)$}
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
         \State Initialize $DP(1,\ell)$ for $\ell \in \{0,1,\dots,nP\}$.
         \vspace{2ex}
         \For{$i=2$ \textbf{to} $n$}
@@ -401,7 +540,7 @@ If it just so happened that $P = q(n)$ for some polynomial $q$, then our algorit
 \begin{algorithm}
     \renewcommand{\thealgorithm}{}
     \caption{\textsc{Knapsack-FPTAS}$(A, w, p, W, P, \varepsilon)$}
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
         \State $K = \varepsilon \frac{P}{n}$
         \State Define a new profit function $p'$ by $p'(a_i) = \big\lfloor \frac{p(a_i)}{K} \big\rfloor$ for each $a_i$.
         \State $S = $ \textsc{Knapsack-DP}$(A,w,p',W,P)$
