@@ -265,7 +265,7 @@ As it turns out, the answer is almost certainly not. More formally, we'll prove 
 \\
 The general strategy for proving hardness of approximation results is to assume the existence of an approximation algorithm of a certain degree and to use the algorithm to create a decider for some known $NP$-hard problem. In the case of TSP, we will show that an approximation algorithm of \textit{any} factor can be used to decide the Hamiltonian cycle problem in polynomial time.
 
-\begin{theorem}{3.2}{}
+\begin{theorem}{3.5}{}
     For any function $\rho(n) \geq 1$, TSP cannot be approximated within a factor of $\rho(n)$, unless $P = NP$.
 
     \begin{proof}
@@ -321,7 +321,7 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
     \end{algorithmic}
 \end{algorithm}
 
-\begin{theorem}{2.1}{}
+\begin{theorem}{4.1}{}
     \textsc{Approx-MAX-3SAT} is an $8/7$-approximation for MAX-3SAT.
 
     \begin{proof}
@@ -360,7 +360,7 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
 
 % We began with two assumptions on the formula our algorithm considers. What happens if we relax these assumptions? First, let's allow our formula's clauses to contain both a variable and its negation, while still assuming each clause cannot contain repeated variables. For example, we'll allow clauses such as $(x_1 \lor \neg x_1 \lor x_2)$, but clauses such as $(x_1 \lor x_1 \lor x_2)$ are still not allowed.
 
-\begin{proposition}{ 2.2}{}
+\begin{proposition}{ 4.2}{}
     Without assuming no clause contains a variable and its negation, Algorithm 1 is \textit{still} an 8/7-approximation for MAX-3SAT.
 \end{proposition}
 
@@ -433,7 +433,7 @@ LP-rounding involves formulating an optimization problem as an IP, relaxing the 
     \end{algorithmic}
 \end{algorithm}
 \vspace{-2ex}
-\begin{theorem}{2.2}
+\begin{theorem}{4.3}
     \textsc{Approx-Min-Weight-VC} is a 2-approximation algorithm for the Min-Weight Vertex Cover problem.
 
     \begin{proof}
