@@ -1,3 +1,20 @@
+# ------ general ------
 .DS_Store
 .vscode/
 .vscode/*
+
+# ------ LaTeX ------
+LaTeX/notes/*
+LaTeX/talk/
+LaTeX/talk/*
+# allow tex, pdf, and images from notes
+!LaTeX/notes/main.tex
+!LaTeX/notes/main.pdf
+!LaTeX/notes/images/
+!LaTeX/notes/images/**
+
+# ------ PDFs ------
+Papers/
+Papers/**
+Textbooks/
+Textbooks/**
