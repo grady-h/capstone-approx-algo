@@ -445,7 +445,7 @@ is a 3-CNF formula with 4 clauses and 6 variables. Given a $k$-CNF formula, the 
         \]
         so that the expected cost of the algorithm will be exactly $\mathbb{E}[Y]$. Since each literal is set to 1 with probability $1/2$ and 0 with probability $1/2$, and a clause is not satisfied only if all three of its literals are set to 0, we have
         \[
-        P[Y_i = 0] = (1/2)^3 = 1/8 \quad \Longrightarrow \quad P[Y_i = 1] = 1 - 1/8 = 7/8.
+        \mathbb{P}[Y_i = 0] = (1/2)^3 = 1/8 \quad \Longrightarrow \quad \mathbb{P}[Y_i = 1] = 1 - 1/8 = 7/8.
         \]
         Computing $\mathbb{E}[Y_i]$ then gives us
         \[
