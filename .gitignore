@@ -5,6 +5,7 @@
 
 # ------ LaTeX ------
 LaTeX/notes/*
+LaTeX/technical_writeup/*
 LaTeX/talk/
 LaTeX/talk/*
 # allow tex, pdf, and images from notes
@@ -12,6 +13,11 @@ LaTeX/talk/*
 !LaTeX/notes/main.pdf
 !LaTeX/notes/images/
 !LaTeX/notes/images/**
+!LaTeX/technical_writeup/main.tex
+!LaTeX/technical_writeup/main.pdf
+!LaTeX/technical_writeup/images/
+!LaTeX/technical_writeup/images/**
+
 
 # ------ PDFs ------
 Papers/
